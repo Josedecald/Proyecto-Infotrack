@@ -1,0 +1,18 @@
+      @media (max-width: 768px) {
+        .container {
+          width: 95% !important;
+          padding: 1rem !important;
+        }
+        .form-label {
+          font-size: 0.9rem;
+        }
+        .h2, h5 {
+          font-size: 1.1rem;
+        }
+        .form-control, .form-select {
+          font-size: 0.9rem;
+        }
+        button {
+          width: 100%;
+        }
+      }

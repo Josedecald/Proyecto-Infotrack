@@ -79,7 +79,7 @@ document.getElementById("btnGenerar").addEventListener("click", async () => {
         });
 
   
-        // ✅ CORREGIDO: PROCESAR IMÁGENES EN SEGUNDA HOJA
+        //PROCSAR IMaGENES EN SEGUNDA HOJA
         let fotoWorksheet = workbook.getWorksheet('FOTOS');
         
         // Si existe la hoja FOTOS, eliminarla y crear una nueva
@@ -130,14 +130,13 @@ document.getElementById("btnGenerar").addEventListener("click", async () => {
 
 
 
-// ✅ CORREGIDO: FUNCIÓN PARA PROCESAR IMÁGENES (agregar workbook como parámetro)
+
 async function procesarImagenes(archivos, worksheet, workbook) {
     // Configurar columnas
     worksheet.columns = [
         { width: 25 }, { width: 25 }, { width: 25 }, { width: 25 }
     ];
     
-    // Título
     worksheet.getCell('A1').value = 'EVIDENCIAS FOTOGRÁFICAS';
     worksheet.mergeCells('A1:D1');
     worksheet.getCell('A1').font = { bold: true, size: 14 };
@@ -153,7 +152,6 @@ async function procesarImagenes(archivos, worksheet, workbook) {
             try {
                 const base64 = await archivoToBase64(archivo);
                 
-                // ✅ CORREGIDO: workbook ahora está disponible como parámetro
                 const imagenId = workbook.addImage({
                     base64: base64,
                     extension: archivo.type.split('/')[1]
@@ -196,7 +194,7 @@ async function procesarImagenes(archivos, worksheet, workbook) {
     }
 }
 
-// ✅ FUNCIÓN PARA CONVERTIR A BASE64
+//FUNCIÓN PARA CONVERTIR A BASE64
 function archivoToBase64(archivo) {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
