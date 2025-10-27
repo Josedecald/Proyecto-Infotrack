@@ -21,9 +21,11 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
     // Agregar clases de validación de Bootstrap
     formulario.classList.add('was-validated');
     
+    const modal2 = new bootstrap.Modal(document.getElementById('staticBackdrop2'));
+
     // Verificar si es válido
     if (!formulario.checkValidity()) {
-        alert("Por favor, completa todos los campos.")
+        modal2.show();
         e.stopPropagation();
         return;
     }
