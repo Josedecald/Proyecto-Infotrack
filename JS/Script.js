@@ -1,9 +1,10 @@
 
 function checkFileCount() {
+    const modal3 = new bootstrap.Modal(document.getElementById('staticBackdrop3'));
     const fileInput = document.getElementById('evidencias');
     const files = fileInput.files;
     if (files.length > 4) {
-        alert('Solo se permiten 4 archivos como máximo.');
+        modal3.show();
         fileInput.value = '';
         return false;
     }
