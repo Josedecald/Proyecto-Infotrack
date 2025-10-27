@@ -264,9 +264,34 @@
           <div class="form-text">Sube una imagen de la firma (formatos permitidos: JPG, PNG).</div>
         </div>
         --->
+    <!--
 		<div class="mt-4 mb-4 text-center">
   			<button type="button" id="btnGenerar" class="btn btn-primary px-5">Generar y descargar documento.</button>
 		</div>
+    -->
+    <div class="text-center my-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+          Descargar documento.
+        </button>
+    </div>
+      <div>
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+          <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+              <div class="modal-header d-block">
+                <h5 class="modal-title text-center" id="staticBackdropLabel">¡RECUERDA!</h5>
+              </div>
+              <div class="modal-body">
+                Verifica siempre la informacion diligenciada antes de generar el archivo.
+              </div>
+              <div class="modal-footer justify-content-between">
+                <button type="button" class="btn btn-primary" id="btnGenerar">Descargar documento</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Revisar info</button> 
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
 

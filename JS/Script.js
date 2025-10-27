@@ -103,30 +103,13 @@ document.getElementById("btnGenerar").addEventListener("click", async () => {
             type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
         });
 
-        Swal.fire({
-        title: "¡RECUERDA!",
-        text: "Revisa y confirma siempre la información diligenciada en el documento antes de generarlo.",
-        icon: "warning",
-        showCancelButton: true,
-        confirmButtonColor: "#63be7b",
-        cancelButtonColor: "#454545ff",
-        cancelButtonText: "Revisar info",
-        confirmButtonText: "Generar Excel"
-        }).then((result) => {
         const nombreBase = `Recepcion_${datos.cliente}_${datos.modelo}_SN_${datos.serial}_${datos.fecha}_${datos.ubicacion}`;
-
-        if (result.isConfirmed) {
-            // ✅ Descargar Excel
-            saveAs(blob, `${nombreBase}.xlsx`);
-            Swal.fire("¡RECUERDA FIRMAR EL DOCUMENTO!", "", "info");
-        }
-        }); 
+        saveAs(blob, `${nombreBase}.xlsx`);
 
     } catch (error) {
         console.error('Error:', error);
         alert('Error generando el archivo');
     }
-});
 
 
 
@@ -205,4 +188,4 @@ function archivoToBase64(archivo) {
         reader.onerror = reject;
         reader.readAsDataURL(archivo);
     });
-}
+}})
