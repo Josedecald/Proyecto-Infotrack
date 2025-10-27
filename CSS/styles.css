@@ -1,0 +1,6 @@
+  .form-control.is-valid,
+  .was-validated .form-control:valid {
+    border-color: #ced4da;
+    background-image: none;
+    padding-right: 0.75rem;
+  }

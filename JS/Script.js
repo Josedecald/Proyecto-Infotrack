@@ -13,8 +13,41 @@ function checkFileCount() {
 
 document.getElementById('evidencias').addEventListener('change', checkFileCount);
 
+document.getElementById("formulario").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    
+    const formulario = e.target;
+    
+    // Agregar clases de validación de Bootstrap
+    formulario.classList.add('was-validated');
+    
+    // Verificar si es válido
+    if (!formulario.checkValidity()) {
+        alert("Por favor, completa todos los campos.")
+        e.stopPropagation();
+        return;
+    }
 
-document.getElementById("btnGenerar").addEventListener("click", async () => {
+    // Si es válido, mostrar modal
+    const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+    modal.show();
+});
+
+document.querySelectorAll('#formulario .form-control').forEach(input => {
+    input.addEventListener('input', () => {
+        if (!input.checkValidity()) {
+            input.classList.add('is-invalid');
+            
+        } else {
+            input.classList.remove('is-invalid');
+        }
+    });
+});
+
+
+document.getElementById("btnGenerar").addEventListener("click", async (e) => {
+    e.preventDefault();
+
     try {
         if (!checkFileCount()) {
             return;
@@ -189,3 +222,5 @@ function archivoToBase64(archivo) {
         reader.readAsDataURL(archivo);
     });
 }})
+
+
