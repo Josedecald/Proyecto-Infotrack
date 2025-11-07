@@ -5,9 +5,41 @@ let contadorEquipos = 1;
 const MAX_EQUIPOS = 20;
 const modalAlert = new bootstrap.Modal(document.getElementById('staticBackdrop2'));
 const modalAlertTitle = document.getElementById('modalAlert');
+const modalConfirmacion = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+
+document.addEventListener('DOMContentLoaded', function() {
+  // Configurar event listeners para los acordeones existentes
+  document.querySelectorAll('.accordion-collapse').forEach(collapse => {
+    const equipoItem = collapse.closest('.equipo-item');
+    const removeBtn = equipoItem.querySelector('.remove-equipo');
+    const removerBtn = equipoItem.querySelector('.remover-equipo');
+    
+    // Verificar si es el primer equipo
+    const esElPrimero = equipoItem === document.querySelector('.equipo-item');
+    
+    if (esElPrimero) {
+      // Primer equipo: nunca mostrar botones
+      removeBtn.style.display = 'none';
+      removerBtn.style.display = 'none';
+    } else {
+      // Equipos adicionales: comportamiento normal
+      collapse.addEventListener('show.bs.collapse', function() {
+        removeBtn.style.display = 'none';
+        removerBtn.style.display = 'block';
+      });
+      
+      collapse.addEventListener('hide.bs.collapse', function() {
+        removeBtn.style.display = 'block';
+        removerBtn.style.display = 'none';
+      });
+    }
+  });
+});
+
+
 
 // =====================
-// AGREGAR NUEVO EQUIPO
+// AGREGAR NUEVO EQUIPO (ACTUALIZADA)
 // =====================
 document.getElementById('agregarEquipo').addEventListener('click', function () {
   if (contadorEquipos >= MAX_EQUIPOS) {
@@ -43,22 +75,81 @@ document.getElementById('agregarEquipo').addEventListener('click', function () {
   collapseDiv.setAttribute('aria-labelledby', headerID);
   collapseDiv.classList.remove('show');
 
-  // Mostrar botón eliminar
-  nuevoEquipo.querySelector('.remover-equipo').style.display = 'block';
+  // Configurar los botones eliminar para el nuevo equipo
+  const removeBtn = nuevoEquipo.querySelector('.remove-equipo');
+  const removerBtn = nuevoEquipo.querySelector('.remover-equipo');
+  
+  // Configurar estados iniciales
+  removeBtn.style.display = 'block'; // Mostrar icono (acordeón plegado)
+  removerBtn.style.display = 'none'; // Ocultar botón texto
+  
+  // Configurar event listeners para el nuevo acordeón
+  collapseDiv.addEventListener('show.bs.collapse', function() {
+    removeBtn.style.display = 'none'; // Ocultar icono
+    removerBtn.style.display = 'block'; // Mostrar botón texto
+  });
+  
+  collapseDiv.addEventListener('hide.bs.collapse', function() {
+    removeBtn.style.display = 'block'; // Mostrar icono
+    removerBtn.style.display = 'none'; // Ocultar botón texto
+  });
 
   equipoContainer.appendChild(nuevoEquipo);
   actualizarContadorEquipos();
 });
 
-// =====================
-// REMOVER EQUIPO
-// =====================
+// Variable para guardar el elemento a eliminar
+let equipoAEliminar = null;
+
 document.addEventListener('click', function (e) {
-  if (e.target.classList.contains('remover-equipo')) {
+  if (e.target.closest('.remove-equipo') || e.target.closest('.remover-equipo')) {
     if (contadorEquipos > 1) {
-      e.target.closest('.equipo-item').remove();
+      // Guardar referencia al equipo a eliminar
+      equipoAEliminar = e.target.closest('.equipo-item');
+      
+      // Mostrar modal de confirmación
+      modalAlertTitle.innerHTML = "¿Estás seguro de eliminar este equipo?";
+      
+      // Cambiar el texto del modal
+      const modalBody = document.querySelector('#staticBackdrop2 .modal-body');
+      modalBody.textContent = "Esta acción no se puede deshacer.";
+      
+      // Cambiar el botón a uno de confirmación
+      const modalFooter = document.querySelector('#staticBackdrop2 .modal-footer');
+      modalFooter.innerHTML = `
+        <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+          <i class="bi bi-trash3 me-1"></i>Sí, eliminar
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Cancelar
+        </button>
+      `;
+      
+      modalAlert.show();
+    } else {
+      modalAlertTitle.innerHTML = "¡Debe haber al menos un equipo!";
+      const modalBody = document.querySelector('#staticBackdrop2 .modal-body');
+      modalBody.textContent = "Se ha detectado un problema en la información ingresada.";
+      const modalFooter = document.querySelector('#staticBackdrop2 .modal-footer');
+      modalFooter.innerHTML = `
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-check2-circle me-1"></i>Ok
+        </button>
+      `;
+      modalAlert.show();
+    }
+  }
+});
+
+// Event listener para confirmar eliminación
+document.addEventListener('click', function(e) {
+  if (e.target.id === 'btnConfirmarEliminar' || e.target.closest('#btnConfirmarEliminar')) {
+    if (equipoAEliminar) {
+      equipoAEliminar.remove();
       contadorEquipos--;
       actualizarContadorEquipos();
+      equipoAEliminar = null;
+      modalAlert.hide();
     }
   }
 });
@@ -100,14 +191,13 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
   formulario.classList.add('was-validated');
 
   if (!formulario.checkValidity()) {
-    modalAlertTitle.innerHTML = "¡Completa todos los campos!";
+    modalAlertTitle.innerHTML = "¡Completa todos los campos obligatorios!";
     modalAlert.show();
     e.stopPropagation();
     return;
   }
 
-  const modal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-  modal.show();
+  modalConfirmacion.show();
 });
 
 document.querySelectorAll('#formulario .form-control, #formulario textarea, #formulario select').forEach(element => {
@@ -265,6 +355,7 @@ document.getElementById("btnGenerar").addEventListener("click", async (e) => {
     const blobFinal = new Blob([bufferFinal], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     });
+    
 
     const nombreArchivo = `Recepcion_${datosGenerales.cliente}_${equipos.length}_equipos_${datosGenerales.fecha}_${datosGenerales.ubicacion}.xlsx`;
     saveAs(blobFinal, nombreArchivo);
@@ -369,4 +460,6 @@ function archivoToBase64(archivo) {
     reader.readAsDataURL(archivo);
   });
 }
+
+
 

@@ -3,314 +3,328 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Formulario de Recepción</title>
+    <title>Formulario de Recepción Técnica</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="CSS/styles.css">
   </head>
 
-  <body class="bg-info">
-    <div class="container col-xxl-8 mt-5 mb-5 border border-primary bg-light rounded-4 p-3 shadow">
-      <div class="text-center mt-3 mb-5 h2">Documento de recepción</div>
-
-      <form class="row px-3 needs-validation" id="formulario" novalidate>
-        <!-- Información de recepción -->
-        <div>
-          <h5>Información de recepción</h5>
-        </div>
-
-        <div class="row">
-          <div class="col-xxl-3 col-sm-auto mt-1">
-            <label for="fecha" class="form-label">Fecha</label>
-            <input type="date" id="fecha" class="form-control" required>
-          </div>
-        </div>
-
-        <div class="col-xxl-6 col-sm-12 mt-3">
-          <label for="nombre" class="form-label">Nombre de quien recibe</label>
-          <input type="text" id="nombre" class="form-control" required>
-        </div>
-
-        <div class="col-xxl-6 col-sm-12 mt-3">
-          <label for="cedula" class="form-label">Cédula</label>
-          <input type="number" id="cedula" class="form-control" required>
-        </div>
-
-        <div class="col-xxl-6 col-sm-12 mt-3">
-          <label for="cliente" class="form-label">Cliente</label>
-          <input type="text" id="cliente" class="form-control" required>
-        </div>
-
-        <div class="col-xxl-6 col-sm-12 mt-3">
-          <label for="idCliente" class="form-label">ID Cliente</label>
-          <input type="text" id="idCliente" class="form-control" required>
-        </div>
-
-        <div class="col-xxl-6 col-sm-12 mt-3">
-          <label for="ubicacion" class="form-label">Ubicación</label>
-          <select class="form-control" id="ubicacion" required>
-            <option value="">-</option>
-            <option value="Arauca">Arauca</option>
-            <option value="Armenia">Armenia</option>
-            <option value="Barranquilla">Barranquilla</option>
-            <option value="Bogotá">Bogotá</option>
-            <option value="Bucaramanga">Bucaramanga</option>
-            <option value="Cali">Cali</option>
-            <option value="Cartagena">Cartagena</option>
-            <option value="Cúcuta">Cúcuta</option>
-            <option value="Florencia">Florencia</option>
-            <option value="Ibagué">Ibagué</option>
-            <option value="Leticia">Leticia</option>
-            <option value="Manizales">Manizales</option>
-            <option value="Medellín">Medellín</option>
-            <option value="Mitú">Mitú</option>
-            <option value="Mocoa">Mocoa</option>
-            <option value="Montería">Montería</option>
-            <option value="Neiva">Neiva</option>
-            <option value="Pasto">Pasto</option>
-            <option value="Pereira">Pereira</option>
-            <option value="Popayán">Popayán</option>
-            <option value="Puerto Carreño">Puerto Carreño</option>
-            <option value="Puerto Inírida">Puerto Inírida</option>
-            <option value="Quibdó">Quibdó</option>
-            <option value="Riohacha">Riohacha</option>
-            <option value="San Andrés">San Andrés</option>
-            <option value="San José del Guaviare">San José del Guaviare</option>
-            <option value="Santa Marta">Santa Marta</option>
-            <option value="Sincelejo">Sincelejo</option>
-            <option value="Tunja">Tunja</option>
-            <option value="Valledupar">Valledupar</option>
-            <option value="Villavicencio">Villavicencio</option>
-            <option value="Yopal">Yopal</option>
-          </select>
-        </div>
-
- <!-- Información del equipo -->
-<div class="mt-3 mb-3 row">
-  <h5>Información del equipo</h5>
-  <div class="col-12 mb-2">
-    <button type="button" class="btn btn-outline-primary btn-sm" id="agregarEquipo">
-      + Agregar otro equipo
-    </button>
-    <small class="text-muted ms-2">Máximo 20 equipos</small>
-  </div>
-
-  <!-- Contenedor principal de equipos -->
-  <div class="accordion equipo-container" id="accordionEquipos">
-    <!-- Equipo 1 -->
-    <div class="accordion-item equipo-item">
-      <h2 class="accordion-header" id="heading-equipo1">
-        <button class="accordion-button" type="button" data-bs-toggle="collapse"
-          data-bs-target="#collapse-equipo1" aria-expanded="true" aria-controls="collapse-equipo1">
-          Equipo 1
-        </button>
-      </h2>
-      <div id="collapse-equipo1" class="accordion-collapse collapse show" aria-labelledby="heading-equipo1"
-        data-bs-parent="#accordionEquipos">
-        <div class="accordion-body">
-          <div class="row">
-            <div class="col-xxl-6 col-sm-12 mt-2">
-              <label class="form-label">Serial *</label>
-              <input type="text" class="form-control serial" required>
-            </div>
-            <div class="col-xxl-6 col-sm-12 mt-2">
-              <label class="form-label">Modelo *</label>
-              <input type="text" class="form-control modelo" required>
-            </div>
-          </div>
-
-          <div class="row mt-3">
-            <div class="col-12">
-              <h6>Estado de componentes de este equipo:</h6>
-            </div>
-
-            <!-- Lista de componentes -->
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Lápiz</label>
-              <select class="form-select estado-lapiz">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Cuerda Lápiz</label>
-              <select class="form-select estado-cuerdaLapiz">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Correa Mano</label>
-              <select class="form-select estado-correaMano">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Teclado Numérico</label>
-              <select class="form-select estado-tecladoNumerico">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Teclado Completo</label>
-              <select class="form-select estado-tecladoCompleto">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Pantalla</label>
-              <select class="form-select estado-pantalla">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Protector Pantalla</label>
-              <select class="form-select estado-protectorPantalla">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Batería</label>
-              <select class="form-select estado-bateria">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Tapa Batería</label>
-              <select class="form-select estado-tapaBateria">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Tarjeta Alm.</label>
-              <select class="form-select estado-tarjetaAlm">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Cubierta Tarjeta</label>
-              <select class="form-select estado-cubiertaTarjeta">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Cristal del Lector</label>
-              <select class="form-select estado-cristalLector">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Carcaza Superior</label>
-              <select class="form-select estado-carcazaSuperior">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">Carcaza Inferior</label>
-              <select class="form-select estado-carcazaInferior">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-
-            <div class="col-xxl-3 col-sm-6 mt-2">
-              <label class="form-label">SIM Card</label>
-              <select class="form-select estado-simCard">
-                <option value="N/A">N/A</option>
-                <option value="B">B</option>
-                <option value="M">M</option>
-              </select>
-            </div>
-          </div>
-
-          <div class="row mt-3">
-            <div class="col-12">
-              <label class="form-label">Descripción del problema o causa del mantenimiento *</label>
-              <textarea class="form-control problema-equipo" rows="2" required></textarea>
-            </div>
-          </div>
-
-          <button type="button" class="btn btn-outline-danger btn-sm mt-2 remover-equipo" style="display: none;">
-            ✕ Remover equipo
-          </button>
-        </div>
+  <body>
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg navbar-dark shadow-sm">
+      <div class="container-fluid">
+        <a class="navbar-brand fw-bold ms-3" href="#">
+          <i class="bi bi-clipboard-check me-2"></i>Recepción Técnica
+        </a>
       </div>
-    </div>
-  </div>
-</div>
+    </nav>
 
- 
-            <div class="row mt-3">
-              <div class="col-12">
-                  <label class="form-label">Observaciones generales*</label>
-                  <textarea class="form-control observaciones-equipo" rows="3" id="observaciones" required></textarea>
+    <!-- CONTENIDO -->
+    <div class="container col-xxl-8 mt-5 mb-5">
+      <div class="card bg-light p-4 shadow">
+        <h2 class="text-center mb-4 text-primary">
+          <i class="bi bi-journal-text me-2"></i>Formulario de Recepción Técnica
+        </h2>
+
+        <form class="row px-3 needs-validation" id="formulario" novalidate>
+          <!-- INFORMACIÓN DE RECEPCIÓN -->
+          <section class="mb-4">
+            <h5 class="border-bottom pb-2 text-primary">
+              <i class="bi bi-person-lines-fill me-2"></i>Información de Recepción
+            </h5>
+
+            <div class="row g-3">
+              <div class="col-xxl-3 col-sm-auto">
+                <label for="fecha" class="form-label">Fecha*</label>
+                <input type="date" id="fecha" class="form-control" required>
+              </div>
+
+              <div class="col-xxl-6 col-sm-12">
+                <label for="nombre" class="form-label">Nombre de quien recibe*</label>
+                <input type="text" id="nombre" class="form-control" required>
+              </div>
+
+              <div class="col-xxl-6 col-sm-12">
+                <label for="cedula" class="form-label">Cédula*</label>
+                <input type="number" id="cedula" class="form-control" required>
+              </div>
+
+              <div class="col-xxl-6 col-sm-12">
+                <label for="cliente" class="form-label">Cliente*</label>
+                <input type="text" id="cliente" class="form-control" required>
+              </div>
+
+              <div class="col-xxl-6 col-sm-12">
+                <label for="idCliente" class="form-label">ID Cliente*</label>
+                <input type="text" id="idCliente" class="form-control" required>
+              </div>
+
+              <div class="col-xxl-6 col-sm-12">
+                <label for="ubicacion" class="form-label">Ubicación</label>
+                <select class="form-select" id="ubicacion" required>
+                  <option value="">Seleccione...</option>
+                  <option value="Arauca">Arauca</option>
+                  <option value="Armenia">Armenia</option>
+                  <option value="Barranquilla">Barranquilla</option>
+                  <option value="Bogotá">Bogotá</option>
+                  <option value="Bucaramanga">Bucaramanga</option>
+                  <option value="Cali">Cali</option>
+                  <option value="Cartagena">Cartagena</option>
+                  <option value="Cúcuta">Cúcuta</option>
+                  <option value="Florencia">Florencia</option>
+                  <option value="Ibagué">Ibagué</option>
+                  <option value="Leticia">Leticia</option>
+                  <option value="Manizales">Manizales</option>
+                  <option value="Medellín">Medellín</option>
+                  <option value="Mitú">Mitú</option>
+                  <option value="Mocoa">Mocoa</option>
+                  <option value="Montería">Montería</option>
+                  <option value="Neiva">Neiva</option>
+                  <option value="Pasto">Pasto</option>
+                  <option value="Pereira">Pereira</option>
+                  <option value="Popayán">Popayán</option>
+                  <option value="Puerto Carreño">Puerto Carreño</option>
+                  <option value="Puerto Inírida">Puerto Inírida</option>
+                  <option value="Quibdó">Quibdó</option>
+                  <option value="Riohacha">Riohacha</option>
+                  <option value="San Andrés">San Andrés</option>
+                  <option value="San José del Guaviare">San José del Guaviare</option>
+                  <option value="Santa Marta">Santa Marta</option>
+                  <option value="Sincelejo">Sincelejo</option>
+                  <option value="Tunja">Tunja</option>
+                  <option value="Valledupar">Valledupar</option>
+                  <option value="Villavicencio">Villavicencio</option>
+                  <option value="Yopal">Yopal</option>
+                </select>
               </div>
             </div>
-        <!-- Evidencias -->
-        <div class="mt-3 mb-3">
-          <label for="evidencias" class="form-label h5">Evidencias fotográficas</label>
-          <input type="file" class="form-control" id="evidencias" multiple accept="image/*">
-          <div class="form-text">Número máximo de fotografías: 20 (formatos permitidos: JPG, PNG).</div>
-        </div>
+          </section>
 
-        <!-- Botones -->
-        <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center my-3 gap-2">
-          <button type="submit" class="btn btn-primary">Descargar documento</button>
-          <button type="reset" class="btn btn-outline-primary btn-sm px-4">Borrar información</button>
-        </div>
-      </form>
+          <!-- INFORMACIÓN DEL EQUIPO -->
+          <section class="mt-3 mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <h5 class="border-bottom pb-2 text-primary">
+                <i class="bi bi-laptop me-2"></i>Información del Equipo
+              </h5>
+              <button type="button" class="btn btn-outline-primary btn-sm" id="agregarEquipo">
+                <i class="bi bi-plus-lg me-1"></i>Agregar otro equipo
+              </button>
+            </div>
+
+            <div class="equipo-container mt-3" id="accordionEquipos">
+              <!-- Equipo 1 (Ejemplo base) -->
+              <div class="equipo-item border rounded p-3 mb-3 bg-white shadow-sm">
+                <div class="accordion-item">
+                  <h2 class="accordion-header d-flex justify-content-between align-items-center" id="heading1">
+                    <div class="d-flex align-items-center w-100">
+                     <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
+                        Equipo 1
+                      </button>
+                      <button type="button" class="btn btn-outline-danger btn-sm remove-equipo" title="Eliminar equipo">
+                        <i class="bi bi-trash3"></i>
+                      </button>
+                    </div>
+                  </h2>
+                  <div id="collapse1" class="accordion-collapse collapse" aria-labelledby="heading1">
+                    <div class="accordion-body">
+                      <div class="row g-3">
+                        <div class="col-xxl-6 col-sm-12">
+                          <label class="form-label">Serial *</label>
+                          <input type="text" class="form-control serial" required>
+                        </div>
+                        <div class="col-xxl-6 col-sm-12">
+                          <label class="form-label">Modelo *</label>
+                          <input type="text" class="form-control modelo" required>
+                        </div>
+                      </div>
+
+                      <!-- ESTADO DE COMPONENTES -->
+                      <div class="mt-4">
+                        <h6 class="text-primary mb-3"><i class="bi bi-gear me-2"></i>Estado de componentes del equipo</h6>
+                        <div class="row g-3">
+                          <div class="col-md-3">
+                            <label class="form-label">Lápiz</label>
+                            <select class="form-select estado-lapiz">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Cuerda Lápiz</label>
+                            <select class="form-select estado-cuerdaLapiz">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Correa Mano</label>
+                            <select class="form-select estado-correaMano">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Teclado Numérico</label>
+                            <select class="form-select estado-tecladoNumerico">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3"><label class="form-label">Teclado Completo</label>
+                            <select class="form-select estado-tecladoCompleto">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Pantalla</label>
+                            <select class="form-select estado-pantalla">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Protector Pantalla</label>
+                            <select class="form-select estado-protectorPantalla">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Batería</label>
+                            <select class="form-select estado-bateria">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Tapa Batería</label>
+                            <select class="form-select estado-tapaBateria">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Tarjeta Alm.</label>
+                            <select class="form-select estado-tarjetaAlm">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Cubierta Tarjeta</label>
+                            <select class="form-select estado-cubiertaTarjeta">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Cristal del Lector</label>
+                            <select class="form-select estado-cristalLector">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3"><label class="form-label">Carcaza Superior</label>
+                            <select class="form-select estado-carcazaSuperior">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">Carcaza Inferior</label>
+                            <select class="form-select estado-carcazaInferior">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                          <div class="col-md-3">
+                            <label class="form-label">SIM Card</label>
+                            <select class="form-select estado-simCard">
+                              <option>N/A</option>
+                              <option>B</option>
+                              <option>M</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="mt-4">
+                        <label class="form-label">Descripción del problema o causa del mantenimiento*</label>
+                        <textarea class="form-control problema-equipo" rows="2" required></textarea>
+                      </div>
+                      <button type="button" class="btn btn-outline-danger btn-sm mt-2 remover-equipo" style="display: none;">
+                        ✕ Remover equipo
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- OBSERVACIONES -->
+          <section class="mt-3">
+            <label class="form-label text-primary">
+              <i class="bi bi-pencil-square me-2"></i>Observaciones generales*
+            </label>
+            <textarea class="form-control observaciones-equipo" rows="3" id="observaciones" required></textarea>
+          </section>
+
+          <!-- EVIDENCIAS -->
+          <section class="mt-4 mb-3">
+            <label for="evidencias" class="form-label text-primary">
+              <i class="bi bi-camera-fill me-2"></i>Evidencias fotográficas
+            </label>
+            <input type="file" class="form-control" id="evidencias" multiple accept="image/*">
+            <small class="text-muted">Número máximo de fotografías: 20 (formatos permitidos: JPG, PNG).</small>
+          </section>
+
+          <!-- BOTONES -->
+          <div class="d-flex flex-column flex-sm-row justify-content-center align-items-center my-3 gap-2">
+            <button type="submit" class="btn btn-primary">
+              <i class="bi bi-download me-1"></i>Descargar documento
+            </button>
+            <button type="reset" class="btn btn-outline-secondary px-4">
+              <i class="bi bi-trash me-1"></i>Limpiar
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
 
     <!-- MODALES -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header d-block">
-            <h5 class="modal-title text-center">¡RECUERDA!</h5>
+        <div class="modal-content rounded-4 shadow">
+          <div class="modal-header">
+            <h5 class="modal-title w-100 text-center">¡RECUERDA!</h5>
           </div>
           <div class="modal-body text-center">
             Verifica siempre la información diligenciada antes de generar el archivo.
           </div>
           <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-primary" id="btnGenerar">Descargar documento</button>
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Revisar info</button>
+            <button type="button" class="btn btn-primary" id="btnGenerar">
+              <i class="bi bi-check-circle me-1"></i>Descargar documento
+            </button>
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-arrow-left-circle me-1"></i>Revisar info
+            </button>
           </div>
         </div>
       </div>
@@ -318,17 +332,26 @@
 
     <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
       <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content">
-          <div class="modal-header d-block">
-            <h5 class="modal-title text-center text-danger" id="modalAlert"></h5>
+        <div class="modal-content rounded-4 shadow">
+          <div class="modal-header bg-danger text-white text-center">
+            <h5 class="modal-title w-100" id="modalAlert">
+              <i class="bi bi-exclamation-triangle me-2"></i>Atención
+            </h5>
           </div>
-          <div class="modal-footer d-block text-center">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Ok</button>
+          <div class="modal-body text-center">
+            Los campos con * son obligatorios.
+          </div>
+          <div class="modal-footer justify-content-center">
+            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+              <i class="bi bi-check2-circle me-1"></i>Ok
+            </button>
           </div>
         </div>
       </div>
     </div>
-
+    <footer class="mt-5">
+      © 2025 Recepción Técnica
+    </footer>
     <!-- SCRIPTS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
@@ -336,7 +359,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <script src="https://unpkg.com/xlsx-populate/browser/xlsx-populate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
     <script src="JS/Script.js"></script>
   </body>
 </html>
