@@ -48,3 +48,30 @@ footer {
 .modal-footer {
   border-top: none;
 }
+
+
+#firmaCanvas {
+  touch-action: none;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.15);
+  width: 100%;
+  max-width: 650px;
+  height: 250px;
+  display: block;
+  margin: 0 auto;
+}
+
+#modalFirma .modal-body {
+  padding: 20px;
+  overflow: hidden;
+}
+
+.canvas-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+

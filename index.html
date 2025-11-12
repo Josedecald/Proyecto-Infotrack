@@ -286,6 +286,63 @@
             <textarea class="form-control observaciones-equipo" rows="3" id="observaciones" required></textarea>
           </section>
 
+          <section>
+            <div class="col-xxl-6 col-sm-12 mt-3">
+              <label for="nombreEntrega" class="form-label">Nombre de a quien se entrega*</label>
+              <input type="text" id="nombreEntrega" class="form-control" required>
+            </div>
+
+            <div class="col-xxl-6 col-sm-12 mt-3">
+              <label for="cedulaEntrega" class="form-label">Cédula de a quien se entrega*</label>
+              <input type="number" id="cedulaEntrega" class="form-control" required>
+            </div>
+
+            <div class="mt-3">
+            <label class="form-label">Firma de quien entrega:</label>
+            <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#modalFirma">
+              <i class="bi bi-pencil"></i> Adjuntar firma
+            </button>
+            <small class="text-muted d-block mt-1">Presiona para firmar con el dedo o el mouse</small>
+
+            <!-- 🔹 Vista previa de la firma -->
+            <div id="previewFirma" class="mt-3" style="display:none;">
+              <p class="mb-1 text-muted">Vista previa de la firma:</p>
+              <img id="imgPreviewFirma" src="" alt="Firma guardada" class="border rounded shadow-sm" style="max-width:250px; max-height:120px;">
+            </div>
+          </div>
+
+          <!-- Modal para la firma -->
+          <div class="modal fade" id="modalFirma" tabindex="-1" aria-labelledby="modalFirmaLabel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+              <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                  <h5 class="modal-title" id="modalFirmaLabel"><i class="bi bi-pencil-square me-2"></i>Capturar firma</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+                </div>
+                <div class="modal-body text-center">
+                  <div class="canvas-container" style="max-width: 100%; overflow: hidden;">
+                    <canvas id="firmaCanvas" class="border border-3 rounded bg-white shadow-sm"></canvas>
+                  </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                  <button type="button" class="btn btn-outline-danger" id="limpiarFirma">
+                    <i class="bi bi-eraser"></i> Limpiar
+                  </button>
+                  <div>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                      <i class="bi bi-x-circle"></i> Cancelar
+                    </button>
+                    <button type="button" class="btn btn-primary" id="guardarFirma" data-bs-dismiss="modal">
+                      <i class="bi bi-check2-circle"></i> Guardar firma
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          </section>
+
           <!-- EVIDENCIAS -->
           <section class="mt-4 mb-3">
             <label for="evidencias" class="form-label text-primary">
@@ -357,6 +414,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>

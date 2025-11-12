@@ -4,6 +4,87 @@ const modalAlert = new bootstrap.Modal(document.getElementById('staticBackdrop2'
 const modalAlertTitle = document.getElementById('modalAlert');
 const modalConfirmacion = new bootstrap.Modal(document.getElementById('staticBackdrop'));
 
+// --- Inicialización del área de firma ---
+let signaturePad;
+let firmaGuardada = null;
+
+// Elementos del modal y del canvas
+const modalFirma = document.getElementById("modalFirma");
+const canvas = document.getElementById("firmaCanvas");
+
+// === Función robusta para ajustar tamaño del canvas ===
+function ajustarTamañoCanvas() {
+  const ratio = Math.max(window.devicePixelRatio || 1, 1);
+  const modalBody = document.querySelector("#modalFirma .modal-body");
+  
+  // Calcular tamaño disponible sin exceder el modal
+  const maxWidth = Math.min(modalBody.clientWidth - 60, 650);
+  const height = 250;
+  
+  // Establecer dimensiones visuales CSS
+  canvas.style.width = maxWidth + 'px';
+  canvas.style.height = height + 'px';
+  
+  // Establecer dimensiones reales del canvas (para alta resolución)
+  canvas.width = maxWidth * ratio;
+  canvas.height = height * ratio;
+  
+  const ctx = canvas.getContext("2d");
+  ctx.scale(ratio, ratio);
+  
+  // Fondo blanco
+  ctx.fillStyle = "#fff";
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  
+  // Si hay un signature pad existente, restaurar la firma si existe
+  if (signaturePad && firmaGuardada) {
+    const img = new Image();
+    img.onload = () => {
+      ctx.drawImage(img, 0, 0, maxWidth, height);
+    };
+    img.src = firmaGuardada;
+  }
+}
+
+// === Evento: al mostrar el modal ===
+modalFirma.addEventListener("shown.bs.modal", () => {
+  ajustarTamañoCanvas();
+
+  // Si ya existe, destrúyelo antes de crear otro
+  if (signaturePad) {
+    signaturePad.off();
+  }
+
+  signaturePad = new SignaturePad(canvas, {
+    backgroundColor: "rgba(255,255,255,1)",
+    penColor: "rgb(0, 0, 0)"
+  });
+});
+
+// === Ajuste dinámico si se cambia el tamaño de la ventana ===
+window.addEventListener("resize", () => {
+  if (modalFirma.classList.contains("show")) {
+    ajustarTamañoCanvas();
+  }
+});
+
+// === Botón limpiar ===
+document.getElementById("limpiarFirma").addEventListener("click", () => {
+  if (signaturePad) signaturePad.clear();
+});
+
+// === Botón guardar ===
+document.getElementById("guardarFirma").addEventListener("click", () => {
+  if (signaturePad && !signaturePad.isEmpty()) {
+    firmaGuardada = signaturePad.toDataURL("image/png");
+    document.getElementById("imgPreviewFirma").src = firmaGuardada;
+    document.getElementById("previewFirma").style.display = "block";
+  } else {
+    firmaGuardada = null;
+    document.getElementById("previewFirma").style.display = "none";
+  }
+});
+
 document.addEventListener('DOMContentLoaded', function() {
   // Configurar event listeners para los acordeones existentes
   document.querySelectorAll('.accordion-collapse').forEach(collapse => {
@@ -215,7 +296,9 @@ document.getElementById("btnGenerar").addEventListener("click", async (e) => {
       cliente: document.getElementById("cliente").value,
       idCliente: document.getElementById("idCliente").value,
       ubicacion: document.getElementById("ubicacion").value,
-      observaciones: document.getElementById("observaciones").value
+      observaciones: document.getElementById("observaciones").value,
+      nombreEntrega: document.getElementById("nombreEntrega").value,
+      cedulaEntrega: document.getElementById("cedulaEntrega").value
     };
 
     // 2️⃣ Recolectar equipos
@@ -299,6 +382,8 @@ document.getElementById("btnGenerar").addEventListener("click", async (e) => {
     sheet.find("{{CEDULA_RECIBE}}").forEach(c => c.value(datosGenerales.cedula));
     sheet.find("{{UBICACION}}").forEach(c => c.value(datosGenerales.ubicacion));
     sheet.find("{{OBSERVACIONES}}").forEach(c => c.value(datosGenerales.observaciones));
+    sheet.find("{{NOMBRE_ENTREGA}}").forEach(c => c.value(datosGenerales.nombreEntrega));
+    sheet.find("{{CEDULA_ENTREGA}}").forEach(c => c.value(datosGenerales.cedulaEntrega));
     sheet.find("{{ID_CLIENTE}}").forEach(c => c.value(datosGenerales.idCliente));
 
     // 4️⃣ Exportar a blob
@@ -307,6 +392,22 @@ document.getElementById("btnGenerar").addEventListener("click", async (e) => {
     // 5️⃣ Reabrir con ExcelJS para agregar imágenes
     const workbookExcelJS = new ExcelJS.Workbook();
     await workbookExcelJS.xlsx.load(await blobPopulate.arrayBuffer());
+
+    const hojaPrincipal = workbookExcelJS.worksheets[0];
+
+    // --- Agregar la firma si existe ---
+    if (firmaGuardada) {
+      const firmaBase64 = firmaGuardada.replace(/^data:image\/png;base64,/, "");
+      const firmaId = workbookExcelJS.addImage({
+        base64: firmaBase64,
+        extension: "png"
+      });
+
+      hojaPrincipal.addImage(firmaId, {
+        tl: { col: 5, row: 32 }, // F33 → col=5, row=32 (0-index)
+        ext: { width: 180, height: 60 }
+      });
+    }
 
     const hojaFotos = workbookExcelJS.addWorksheet("FOTOS");
     hojaFotos.columns = [
@@ -345,7 +446,6 @@ document.getElementById("btnGenerar").addEventListener("click", async (e) => {
     const blobFinal = new Blob([bufferFinal], {
       type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
     });
-    
 
     const nombreArchivo = `Recepcion_${datosGenerales.cliente}_${equipos.length}_equipos_${datosGenerales.fecha}_${datosGenerales.ubicacion}.xlsx`;
     saveAs(blobFinal, nombreArchivo);
@@ -357,91 +457,9 @@ document.getElementById("btnGenerar").addEventListener("click", async (e) => {
   }
 });
 
-
 // =====================
-// FUNCIÓN: REEMPLAZAR PLACEHOLDERS
+// FUNCIÓN: CONVERTIR ARCHIVO A BASE64
 // =====================
-function reemplazarPlaceholdersEnWorkbook(workbook, equipos, datosGenerales) {
-  const MAX_EQUIPOS = 20;
-  const mapa = {};
-
-  // Datos generales
-  mapa["{{CLIENTE}}"] = datosGenerales.cliente || "";
-  mapa["{{FECHA}}"] = datosGenerales.fecha || "";
-  mapa["{{UBICACION}}"] = datosGenerales.ubicacion || "";
-  mapa["{{OBSERVACIONES}}"] = datosGenerales.observaciones || "";
-  mapa["{{NOMBRE_RECIBE}}"] = datosGenerales.nombre || "";
-  mapa["{{CEDULA_RECIBE}}"] = datosGenerales.cedula || "";
-  mapa["{{ID_CLIENTE}}"] = datosGenerales.idCliente || "";
-
-  // Equipos
-  const estadoKeys = ["LAPIZ","CUERDA","CORREA","TECLADO_NUM","TECLADO_COMPL","PANTALLA","PROTECTOR","BATERIA","TAPA_BATERIA","TARJETA_ALM","CUBIERTA_TARJETA","CRISTAL","CARCAZA_SUP","CARCAZA_INF","SIM"];
-  for (let i = 0; i < MAX_EQUIPOS; i++) {
-    const idx = i + 1;
-    const e = equipos[i] || null;
-    mapa[`{{E${idx}_ID}}`] = e ? (datosGenerales.idCliente || "") : "";
-    mapa[`{{E${idx}_SERIAL}}`] = e ? (e.serial || "") : "";
-    mapa[`{{E${idx}_MODELO}}`] = e ? (e.modelo || "") : "";
-    mapa[`{{E${idx}_PROBLEMA}}`] = e ? (e.problema || "") : "";
-
-    const estados = e ? Object.values(e.estados || {}) : [];
-    for (let j = 0; j < estadoKeys.length; j++) {
-      mapa[`{{E${idx}_${estadoKeys[j]}}}`] = estados[j] || "";
-    }
-  }
-
-  workbook.worksheets.forEach(sheet => {
-    sheet.eachRow({ includeEmpty: true }, row => {
-      row.eachCell({ includeEmpty: true }, cell => {
-        if (cell.value && typeof cell.value === "string") {
-          let valor = cell.value;
-          for (const key in mapa) {
-            if (mapa.hasOwnProperty(key) && valor.includes(key)) {
-              valor = valor.split(key).join(String(mapa[key]));
-            }
-          }
-          if (valor !== cell.value) cell.value = valor;
-        }
-      });
-    });
-  });
-}
-
-// =====================
-// FUNCIÓN: PROCESAR IMÁGENES
-// =====================
-async function procesarImagenes(archivos, worksheet, workbook) {
-  worksheet.columns = [
-    { width: 25 }, { width: 25 }, { width: 25 }, { width: 25 }
-  ];
-  worksheet.getCell('A1').value = 'EVIDENCIAS FOTOGRÁFICAS';
-  worksheet.mergeCells('A1:D1');
-  worksheet.getCell('A1').font = { bold: true, size: 14 };
-  worksheet.getCell('A1').alignment = { horizontal: 'center' };
-
-  let filaActual = 3, columnaActual = 1;
-  for (let i = 0; i < archivos.length; i++) {
-    const archivo = archivos[i];
-    if (archivo.type.startsWith('image/')) {
-      try {
-        const base64 = await archivoToBase64(archivo);
-        const imagenId = workbook.addImage({
-          base64: base64,
-          extension: archivo.type.split('/')[1]
-        });
-        worksheet.addImage(imagenId, {
-          tl: { col: columnaActual - 1, row: filaActual - 1 },
-          br: { col: columnaActual, row: filaActual + 20 }
-        });
-        columnaActual++;
-        if (columnaActual > 4) { columnaActual = 1; filaActual += 25; }
-      } catch (error) {
-        console.error(`Error procesando imagen ${archivo.name}:`, error);
-      }
-    }
-  }
-}
-
 function archivoToBase64(archivo) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -450,6 +468,3 @@ function archivoToBase64(archivo) {
     reader.readAsDataURL(archivo);
   });
 }
-
-
-
