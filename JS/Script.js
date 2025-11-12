@@ -1,6 +1,3 @@
-// =====================
-// VARIABLES GLOBALES
-// =====================
 let contadorEquipos = 1;
 const MAX_EQUIPOS = 20;
 const modalAlert = new bootstrap.Modal(document.getElementById('staticBackdrop2'));
@@ -36,11 +33,6 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-
-
-// =====================
-// AGREGAR NUEVO EQUIPO (ACTUALIZADA)
-// =====================
 document.getElementById('agregarEquipo').addEventListener('click', function () {
   if (contadorEquipos >= MAX_EQUIPOS) {
     modalAlertTitle.innerHTML = "¡Máximo 20 equipos por documento!";
@@ -52,7 +44,6 @@ document.getElementById('agregarEquipo').addEventListener('click', function () {
   const primerEquipo = equipoContainer.querySelector('.equipo-item');
   const nuevoEquipo = primerEquipo.cloneNode(true);
 
-  // Limpiar campos
   nuevoEquipo.querySelectorAll('input, textarea, select').forEach(el => {
     if (el.tagName === 'SELECT') el.value = 'N/A';
     else el.value = '';
@@ -63,7 +54,6 @@ document.getElementById('agregarEquipo').addEventListener('click', function () {
   const headerID = `heading-${equipoID}`;
   const collapseID = `collapse-${equipoID}`;
 
-  // Ajustar IDs únicos
   nuevoEquipo.querySelector('.accordion-header').setAttribute('id', headerID);
   const boton = nuevoEquipo.querySelector('.accordion-button');
   boton.textContent = `Equipo ${contadorEquipos}`;
