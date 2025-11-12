@@ -32,9 +32,8 @@ function ajustarTamañoCanvas() {
   const ctx = canvas.getContext("2d");
   ctx.scale(ratio, ratio);
   
-  // Fondo blanco
-  ctx.fillStyle = "#fff";
-  ctx.fillRect(0, 0, canvas.width, canvas.height);
+  // Limpiar canvas (sin fondo, transparente)
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
   
   // Si hay un signature pad existente, restaurar la firma si existe
   if (signaturePad && firmaGuardada) {
@@ -56,7 +55,7 @@ modalFirma.addEventListener("shown.bs.modal", () => {
   }
 
   signaturePad = new SignaturePad(canvas, {
-    backgroundColor: "rgba(255,255,255,1)",
+    backgroundColor: "rgba(255,255,255,0)", // Fondo transparente
     penColor: "rgb(0, 0, 0)"
   });
 });
@@ -404,8 +403,8 @@ document.getElementById("btnGenerar").addEventListener("click", async (e) => {
       });
 
       hojaPrincipal.addImage(firmaId, {
-        tl: { col: 5, row: 32 }, // F33 → col=5, row=32 (0-index)
-        ext: { width: 180, height: 60 }
+        tl: { col: 5, row: 31 }, // F33 → col=5, row=32 (0-index)
+        ext: { width: 300, height: 100 }
       });
     }
 
