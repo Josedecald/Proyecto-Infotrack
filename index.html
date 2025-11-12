@@ -365,47 +365,51 @@
       </div>
     </div>
 
-    <!-- MODALES -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header">
-            <h5 class="modal-title w-100 text-center">¡RECUERDA!</h5>
-          </div>
-          <div class="modal-body text-center">
-            Verifica siempre la información diligenciada antes de generar el archivo.
-          </div>
-          <div class="modal-footer justify-content-between">
-            <button type="button" class="btn btn-primary" id="btnGenerar">
-              <i class="bi bi-check-circle me-1"></i>Descargar documento
-            </button>
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-              <i class="bi bi-arrow-left-circle me-1"></i>Revisar info
-            </button>
-          </div>
-        </div>
+<!-- Modal para Confirmación de Eliminación -->
+<div class="modal fade" id="modalConfirmarEliminar" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header bg-danger text-white text-center">
+        <h5 class="modal-title w-100">
+          <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Eliminación
+        </h5>
+      </div>
+      <div class="modal-body text-center">
+        ¿Estás seguro de eliminar este equipo?<br>
+        <small class="text-muted">Esta acción no se puede deshacer.</small>
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+          <i class="bi bi-trash3 me-1"></i>Sí, eliminar
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Cancelar
+        </button>
       </div>
     </div>
+  </div>
+</div>
 
-    <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
-      <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content rounded-4 shadow">
-          <div class="modal-header bg-danger text-white text-center">
-            <h5 class="modal-title w-100" id="modalAlert">
-              <i class="bi bi-exclamation-triangle me-2"></i>Atención
-            </h5>
-          </div>
-          <div class="modal-body text-center">
-            Los campos con * son obligatorios.
-          </div>
-          <div class="modal-footer justify-content-center">
-            <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-              <i class="bi bi-check2-circle me-1"></i>Ok
-            </button>
-          </div>
-        </div>
+<!-- Modal para Alertas Generales (mantén el existente) -->
+<div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header bg-danger text-white text-center">
+        <h5 class="modal-title w-100" id="modalAlert">
+          <i class="bi bi-exclamation-triangle me-2"></i>Atención
+        </h5>
+      </div>
+      <div class="modal-body text-center" id="modalAlertBody">
+        Los campos con * son obligatorios.
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-check2-circle me-1"></i>Ok
+        </button>
       </div>
     </div>
+  </div>
+</div>
     <footer class="mt-5">
       © 2025 Recepción Técnica
     </footer>

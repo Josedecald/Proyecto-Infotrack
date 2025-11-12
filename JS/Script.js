@@ -3,6 +3,7 @@ const MAX_EQUIPOS = 20;
 const modalAlert = new bootstrap.Modal(document.getElementById('staticBackdrop2'));
 const modalAlertTitle = document.getElementById('modalAlert');
 const modalConfirmacion = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+const modalConfirmarEliminar = new bootstrap.Modal(document.getElementById('modalConfirmarEliminar'));
 
 // --- Inicialización del área de firma ---
 let signaturePad;
@@ -177,40 +178,16 @@ document.addEventListener('click', function (e) {
       // Guardar referencia al equipo a eliminar
       equipoAEliminar = e.target.closest('.equipo-item');
       
-      // Mostrar modal de confirmación
-      modalAlertTitle.innerHTML = "¿Estás seguro de eliminar este equipo?";
-      
-      // Cambiar el texto del modal
-      const modalBody = document.querySelector('#staticBackdrop2 .modal-body');
-      modalBody.textContent = "Esta acción no se puede deshacer.";
-      
-      // Cambiar el botón a uno de confirmación
-      const modalFooter = document.querySelector('#staticBackdrop2 .modal-footer');
-      modalFooter.innerHTML = `
-        <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
-          <i class="bi bi-trash3 me-1"></i>Sí, eliminar
-        </button>
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-x-circle me-1"></i>Cancelar
-        </button>
-      `;
-      
-      modalAlert.show();
+      // Usar el modal específico para eliminación
+      modalConfirmarEliminar.show();
     } else {
-      modalAlertTitle.innerHTML = "¡Debe haber al menos un equipo!";
-      const modalBody = document.querySelector('#staticBackdrop2 .modal-body');
-      modalBody.textContent = "Se ha detectado un problema en la información ingresada.";
-      const modalFooter = document.querySelector('#staticBackdrop2 .modal-footer');
-      modalFooter.innerHTML = `
-        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-          <i class="bi bi-check2-circle me-1"></i>Ok
-        </button>
-      `;
+      // Para el caso de intentar eliminar el último equipo, usa el modal de alerta
+      document.getElementById('modalAlert').innerHTML = "¡Debe haber al menos un equipo!";
+      document.getElementById('modalAlertBody').textContent = "Se ha detectado un problema en la información ingresada.";
       modalAlert.show();
     }
   }
 });
-
 // Event listener para confirmar eliminación
 document.addEventListener('click', function(e) {
   if (e.target.id === 'btnConfirmarEliminar' || e.target.closest('#btnConfirmarEliminar')) {
@@ -243,7 +220,8 @@ function checkFileCount() {
   const fileInput = document.getElementById('evidencias');
   const files = fileInput.files;
   if (files.length > 20) {
-    modalAlertTitle.innerHTML = "¡Solo se permiten 20 fotografías!";
+    document.getElementById('modalAlert').innerHTML = "¡Solo se permiten 20 fotografías!";
+    document.getElementById('modalAlertBody').textContent = "Por favor, selecciona máximo 20 imágenes.";
     modalAlert.show();
     fileInput.value = '';
     return false;
@@ -261,7 +239,8 @@ document.getElementById("formulario").addEventListener("submit", async (e) => {
   formulario.classList.add('was-validated');
 
   if (!formulario.checkValidity()) {
-    modalAlertTitle.innerHTML = "¡Completa todos los campos obligatorios!";
+    document.getElementById('modalAlert').innerHTML = "¡Completa todos los campos obligatorios!";
+    document.getElementById('modalAlertBody').textContent = "Por favor, revisa que todos los campos marcados con * estén completos.";
     modalAlert.show();
     e.stopPropagation();
     return;
