@@ -4,8 +4,8 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Formulario de Recepción Técnica</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet" crossorigin="anonymous">
     <link rel="stylesheet" href="CSS/styles.css">
   </head>
 
@@ -106,9 +106,12 @@
               <h5 class="border-bottom pb-2 text-primary">
                 <i class="bi bi-laptop me-2"></i>Información del Equipo
               </h5>
-              <button type="button" class="btn btn-outline-primary btn-sm" id="agregarEquipo">
-                <i class="bi bi-plus-lg me-1"></i>Agregar otro equipo
-              </button>
+              <div class="d-flex align-items-center gap-2">
+                <button type="button" class="btn btn-outline-primary btn-sm" id="agregarEquipo">
+                  <i class="bi bi-plus-lg me-1"></i>Agregar otro equipo
+                </button>
+                <small class="text-muted">1/20 equipos</small>
+              </div>
             </div>
 
             <div class="equipo-container mt-3" id="accordionEquipos">
@@ -121,7 +124,7 @@
                         data-bs-target="#collapse1" aria-expanded="false" aria-controls="collapse1">
                         Equipo 1
                       </button>
-                      <button type="button" class="btn btn-outline-danger btn-sm remove-equipo" title="Eliminar equipo">
+                      <button type="button" class="btn btn-outline-danger btn-sm remove-equipo ms-2" title="Eliminar equipo">
                         <i class="bi bi-trash3"></i>
                       </button>
                     </div>
@@ -365,6 +368,30 @@
       </div>
     </div>
 
+<!-- Modal para Confirmación de Generación -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 shadow">
+      <div class="modal-header bg-primary text-white text-center">
+        <h5 class="modal-title w-100">
+          <i class="bi bi-check-circle me-2"></i>Confirmar Generación
+        </h5>
+      </div>
+      <div class="modal-body text-center">
+        ¿Estás seguro de generar el documento con la información ingresada?
+      </div>
+      <div class="modal-footer justify-content-center">
+        <button type="button" class="btn btn-primary" id="btnGenerar">
+          <i class="bi bi-download me-1"></i>Generar Documento
+        </button>
+        <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+          <i class="bi bi-x-circle me-1"></i>Cancelar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Modal para Confirmación de Eliminación -->
 <div class="modal fade" id="modalConfirmarEliminar" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
@@ -390,7 +417,7 @@
   </div>
 </div>
 
-<!-- Modal para Alertas Generales (mantén el existente) -->
+<!-- Modal para Alertas Generales -->
 <div class="modal fade" id="staticBackdrop2" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content rounded-4 shadow">
@@ -410,18 +437,17 @@
     </div>
   </div>
 </div>
-    <footer class="mt-5">
+
+    <footer class="mt-5 text-center text-muted">
       © 2025 Recepción Técnica
     </footer>
+
     <!-- SCRIPTS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js" crossorigin="anonymous"></script>
     <script src="JS/Script.js"></script>
   </body>
 </html>
