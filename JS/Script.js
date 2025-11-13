@@ -10,7 +10,7 @@ let firmaGuardada = null;
 const modalFirma = document.getElementById("modalFirma");
 const canvas = document.getElementById("firmaCanvas");
 
-// Inicialización cuando el DOM esté listo
+// Inicialización cuando el DOM esté listo.
 document.addEventListener('DOMContentLoaded', function() {
     // Inicializar modales solo si existen
     const modalAlertElement = document.getElementById('staticBackdrop2');
