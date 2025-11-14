@@ -17,20 +17,43 @@ class SistemaGestionTecnica {
     }
 
     init() {
-        document.addEventListener('DOMContentLoaded', () => {
-            this.inicializarModales();
-            this.inicializarEventListeners();
-            this.inicializarAcordeones();
-        });
+        // Usar DOMContentLoaded correctamente
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', () => this.inicializar());
+        } else {
+            this.inicializar();
+        }
+    }
+
+    inicializar() {
+        this.inicializarModales();
+        this.inicializarEventListeners();
+        this.inicializarAcordeones();
     }
 
     // =====================
     // INICIALIZACIÓN
     // =====================
     inicializarModales() {
-        // Modal de alerta general
-        this.modalAlert = new bootstrap.Modal(document.getElementById('staticBackdrop2'));
-        this.modalConfirmarEliminar = new bootstrap.Modal(document.getElementById('modalConfirmarEliminar'));
+        // Inicializar modales solo si existen los elementos
+        const modalAlertElement = document.getElementById('staticBackdrop2');
+        const modalConfirmarElement = document.getElementById('modalConfirmarEliminar');
+        
+        if (modalAlertElement) {
+            try {
+                this.modalAlert = new bootstrap.Modal(modalAlertElement);
+            } catch (error) {
+                console.error('Error inicializando modal de alerta:', error);
+            }
+        }
+        
+        if (modalConfirmarElement) {
+            try {
+                this.modalConfirmarEliminar = new bootstrap.Modal(modalConfirmarElement);
+            } catch (error) {
+                console.error('Error inicializando modal de confirmación:', error);
+            }
+        }
         
         // Elementos de alerta
         this.modalAlertTitle = document.querySelector('#staticBackdrop2 .modal-title');
@@ -39,20 +62,48 @@ class SistemaGestionTecnica {
 
     inicializarEventListeners() {
         // Formularios
-        document.getElementById('formularioRecepcion')?.addEventListener('submit', (e) => this.validarYGenerar(e, 'recepcion'));
-        document.getElementById('formularioEntrega')?.addEventListener('submit', (e) => this.validarYGenerar(e, 'entrega'));
+        const formRecepcion = document.getElementById('formularioRecepcion');
+        const formEntrega = document.getElementById('formularioEntrega');
+        
+        if (formRecepcion) {
+            formRecepcion.addEventListener('submit', (e) => this.validarYGenerar(e, 'recepcion'));
+        }
+        
+        if (formEntrega) {
+            formEntrega.addEventListener('submit', (e) => this.validarYGenerar(e, 'entrega'));
+        }
 
         // Botones agregar equipo
-        document.getElementById('agregarEquipoRecepcion')?.addEventListener('click', () => this.agregarEquipo('recepcion'));
-        document.getElementById('agregarEquipoEntrega')?.addEventListener('click', () => this.agregarEquipo('entrega'));
+        const btnAgregarRecepcion = document.getElementById('agregarEquipoRecepcion');
+        const btnAgregarEntrega = document.getElementById('agregarEquipoEntrega');
+        
+        if (btnAgregarRecepcion) {
+            btnAgregarRecepcion.addEventListener('click', () => this.agregarEquipo('recepcion'));
+        }
+        
+        if (btnAgregarEntrega) {
+            btnAgregarEntrega.addEventListener('click', () => this.agregarEquipo('entrega'));
+        }
 
         // Eliminación de equipos
         document.addEventListener('click', (e) => this.manejarEliminacionEquipo(e));
-        document.getElementById('btnConfirmarEliminar')?.addEventListener('click', () => this.confirmarEliminacion());
+        
+        const btnConfirmarEliminar = document.getElementById('btnConfirmarEliminar');
+        if (btnConfirmarEliminar) {
+            btnConfirmarEliminar.addEventListener('click', () => this.confirmarEliminacion());
+        }
 
         // Validación de archivos
-        document.getElementById('evidenciasRecepcion')?.addEventListener('change', () => this.validarArchivos('recepcion'));
-        document.getElementById('evidenciasEntrega')?.addEventListener('change', () => this.validarArchivos('entrega'));
+        const evidenciasRecepcion = document.getElementById('evidenciasRecepcion');
+        const evidenciasEntrega = document.getElementById('evidenciasEntrega');
+        
+        if (evidenciasRecepcion) {
+            evidenciasRecepcion.addEventListener('change', () => this.validarArchivos('recepcion'));
+        }
+        
+        if (evidenciasEntrega) {
+            evidenciasEntrega.addEventListener('change', () => this.validarArchivos('entrega'));
+        }
 
         // Firmas
         this.inicializarFirmas();
@@ -71,19 +122,33 @@ class SistemaGestionTecnica {
             const modalElement = document.getElementById(modal);
             const canvasElement = document.getElementById(canvas);
 
-            if (modalElement && canvasElement) {
-                // Evento al mostrar modal
-                modalElement.addEventListener('shown.bs.modal', () => {
-                    this.inicializarSignaturePad(canvas, tipo);
-                });
+            if (!modalElement) {
+                console.warn(`Modal ${modal} no encontrado en el HTML`);
+                return;
+            }
 
-                // Botones limpiar
-                document.getElementById(`limpiarFirma${this.capitalize(tipo)}`)?.addEventListener('click', () => {
+            if (!canvasElement) {
+                console.warn(`Canvas ${canvas} no encontrado en el HTML`);
+                return;
+            }
+
+            // Evento al mostrar modal
+            modalElement.addEventListener('shown.bs.modal', () => {
+                this.inicializarSignaturePad(canvas, tipo);
+            });
+
+            // Botones limpiar
+            const btnLimpiar = document.getElementById(`limpiarFirma${this.capitalize(tipo)}`);
+            if (btnLimpiar) {
+                btnLimpiar.addEventListener('click', () => {
                     if (this.signaturePads[tipo]) this.signaturePads[tipo].clear();
                 });
+            }
 
-                // Botones guardar
-                document.getElementById(`guardarFirma${this.capitalize(tipo)}`)?.addEventListener('click', () => {
+            // Botones guardar
+            const btnGuardar = document.getElementById(`guardarFirma${this.capitalize(tipo)}`);
+            if (btnGuardar) {
+                btnGuardar.addEventListener('click', () => {
                     this.guardarFirma(tipo);
                 });
             }
@@ -100,7 +165,7 @@ class SistemaGestionTecnica {
         }
 
         // Ajustar tamaño
-        this.ajustarTamañoCanvas(canvas);
+        this.ajustarTamanoCanvas(canvas);
 
         // Crear nuevo pad
         this.signaturePads[tipo] = new SignaturePad(canvas, {
@@ -119,7 +184,7 @@ class SistemaGestionTecnica {
         }
     }
 
-    ajustarTamañoCanvas(canvas) {
+    ajustarTamanoCanvas(canvas) {
         const ratio = Math.max(window.devicePixelRatio || 1, 1);
         const modalBody = canvas.closest('.modal-body');
         
@@ -142,11 +207,15 @@ class SistemaGestionTecnica {
         const pad = this.signaturePads[tipo];
         if (pad && !pad.isEmpty()) {
             this.firmasGuardadas[tipo] = pad.toDataURL("image/png");
-            document.getElementById(`imgPreviewFirma${this.capitalize(tipo)}`).src = this.firmasGuardadas[tipo];
-            document.getElementById(`previewFirma${this.capitalize(tipo)}`).style.display = "block";
+            const imgPreview = document.getElementById(`imgPreviewFirma${this.capitalize(tipo)}`);
+            const previewContainer = document.getElementById(`previewFirma${this.capitalize(tipo)}`);
+            
+            if (imgPreview) imgPreview.src = this.firmasGuardadas[tipo];
+            if (previewContainer) previewContainer.style.display = "block";
         } else {
             this.firmasGuardadas[tipo] = null;
-            document.getElementById(`previewFirma${this.capitalize(tipo)}`).style.display = "none";
+            const previewContainer = document.getElementById(`previewFirma${this.capitalize(tipo)}`);
+            if (previewContainer) previewContainer.style.display = "none";
         }
     }
 
@@ -168,21 +237,23 @@ class SistemaGestionTecnica {
 
     configurarAcordeon(collapse, tipo, esPrimero) {
         const equipoItem = collapse.closest('.equipo-item');
+        if (!equipoItem) return;
+        
         const removeBtn = equipoItem.querySelector('.remove-equipo');
         const removerBtn = equipoItem.querySelector('.remover-equipo');
 
         if (esPrimero) {
-            removeBtn.style.display = 'none';
-            removerBtn.style.display = 'none';
+            if (removeBtn) removeBtn.style.display = 'none';
+            if (removerBtn) removerBtn.style.display = 'none';
         } else {
             collapse.addEventListener('show.bs.collapse', () => {
-                removeBtn.style.display = 'none';
-                removerBtn.style.display = 'block';
+                if (removeBtn) removeBtn.style.display = 'none';
+                if (removerBtn) removerBtn.style.display = 'block';
             });
             
             collapse.addEventListener('hide.bs.collapse', () => {
-                removeBtn.style.display = 'block';
-                removerBtn.style.display = 'none';
+                if (removeBtn) removeBtn.style.display = 'block';
+                if (removerBtn) removerBtn.style.display = 'none';
             });
         }
     }
@@ -195,43 +266,57 @@ class SistemaGestionTecnica {
 
         const containerId = `accordionEquipos${this.capitalize(tipo)}`;
         const container = document.getElementById(containerId);
+        if (!container) return;
+        
         const primerEquipo = container.querySelector('.equipo-item');
+        if (!primerEquipo) return;
+        
         const nuevoEquipo = primerEquipo.cloneNode(true);
 
         // Limpiar campos
         nuevoEquipo.querySelectorAll('input, textarea, select').forEach(el => {
-            if (el.tagName === 'SELECT') el.value = tipo === 'recepcion' ? 'N/A' : '';
-            else if (el.type === 'checkbox') el.checked = false;
-            else el.value = '';
+            if (el.tagName === 'SELECT') {
+                el.value = tipo === 'recepcion' ? 'N/A' : '';
+            } else if (el.type === 'checkbox') {
+                el.checked = false;
+            } else {
+                el.value = '';
+            }
         });
 
         this.contadores[tipo]++;
-        const equipoID = `equipo-${tipo}-${this.contadores[tipo]}`;
-        const headerID = `heading-${tipo}-${this.contadores[tipo]}`;
         const collapseID = `collapse${this.capitalize(tipo)}${this.contadores[tipo]}`;
+        const headerID = `heading-${tipo}-${this.contadores[tipo]}`;
 
         // Actualizar IDs y atributos
-        nuevoEquipo.querySelector('.accordion-header').setAttribute('id', headerID);
+        const header = nuevoEquipo.querySelector('.accordion-header');
+        if (header) header.setAttribute('id', headerID);
         
         const boton = nuevoEquipo.querySelector('.accordion-button');
-        boton.textContent = `Equipo ${this.contadores[tipo]}`;
-        boton.setAttribute('data-bs-target', `#${collapseID}`);
-        boton.setAttribute('aria-controls', collapseID);
+        if (boton) {
+            boton.textContent = `Equipo ${this.contadores[tipo]}`;
+            boton.setAttribute('data-bs-target', `#${collapseID}`);
+            boton.setAttribute('aria-controls', collapseID);
+        }
 
         const collapseDiv = nuevoEquipo.querySelector('.accordion-collapse');
-        collapseDiv.setAttribute('id', collapseID);
-        collapseDiv.setAttribute('aria-labelledby', headerID);
-        collapseDiv.classList.remove('show');
+        if (collapseDiv) {
+            collapseDiv.setAttribute('id', collapseID);
+            collapseDiv.setAttribute('aria-labelledby', headerID);
+            collapseDiv.classList.remove('show');
+        }
 
         // Configurar botones
         const removeBtn = nuevoEquipo.querySelector('.remove-equipo');
         const removerBtn = nuevoEquipo.querySelector('.remover-equipo');
         
-        removeBtn.style.display = 'block';
-        removerBtn.style.display = 'none';
+        if (removeBtn) removeBtn.style.display = 'block';
+        if (removerBtn) removerBtn.style.display = 'none';
 
         // Configurar eventos del acordeón
-        this.configurarAcordeon(collapseDiv, tipo, false);
+        if (collapseDiv) {
+            this.configurarAcordeon(collapseDiv, tipo, false);
+        }
 
         container.appendChild(nuevoEquipo);
     }
@@ -241,8 +326,9 @@ class SistemaGestionTecnica {
         if (!target) return;
 
         const equipoItem = target.closest('.equipo-item');
-        const container = equipoItem.closest('[id^="accordionEquipos"]');
+        if (!equipoItem) return;
         
+        const container = equipoItem.closest('[id^="accordionEquipos"]');
         if (!container) return;
 
         // Determinar tipo (recepcion o entrega)
@@ -250,7 +336,9 @@ class SistemaGestionTecnica {
 
         if (this.contadores[tipo] > 1) {
             this.equiposAEliminar[tipo] = equipoItem;
-            this.modalConfirmarEliminar.show();
+            if (this.modalConfirmarEliminar) {
+                this.modalConfirmarEliminar.show();
+            }
         } else {
             this.mostrarAlerta("¡Debe haber al menos un equipo!", "No puedes eliminar todos los equipos.");
         }
@@ -266,7 +354,9 @@ class SistemaGestionTecnica {
                 break;
             }
         }
-        this.modalConfirmarEliminar.hide();
+        if (this.modalConfirmarEliminar) {
+            this.modalConfirmarEliminar.hide();
+        }
     }
 
     // =====================
@@ -311,15 +401,15 @@ class SistemaGestionTecnica {
         try {
             // 1️⃣ Recolectar datos generales
             const datosGenerales = {
-                fecha: document.getElementById("fechaRecepcion").value,
-                nombre: document.getElementById("nombreRecepcion").value,
-                cedula: document.getElementById("cedulaRecepcion").value,
-                cliente: document.getElementById("clienteRecepcion").value,
-                idCliente: document.getElementById("idClienteRecepcion").value,
-                ubicacion: document.getElementById("ubicacionRecepcion").value,
-                observaciones: document.getElementById("observacionesRecepcion").value,
-                nombreEntrega: document.getElementById("nombreEntregaRecepcion").value,
-                cedulaEntrega: document.getElementById("cedulaEntregaRecepcion").value
+                fecha: document.getElementById("fechaRecepcion")?.value || "",
+                nombre: document.getElementById("nombreRecepcion")?.value || "",
+                cedula: document.getElementById("cedulaRecepcion")?.value || "",
+                cliente: document.getElementById("clienteRecepcion")?.value || "",
+                idCliente: document.getElementById("idClienteRecepcion")?.value || "",
+                ubicacion: document.getElementById("ubicacionRecepcion")?.value || "",
+                observaciones: document.getElementById("observacionesRecepcion")?.value || "",
+                nombreEntrega: document.getElementById("nombreEntregaRecepcion")?.value || "",
+                cedulaEntrega: document.getElementById("cedulaEntregaRecepcion")?.value || ""
             };
 
             // 2️⃣ Recolectar equipos
@@ -354,12 +444,14 @@ class SistemaGestionTecnica {
             });
 
             if (equipos.length === 0) {
-                this.mostrarAlerta("Debes ingresar al menos un equipo con Serial, Modelo y Descripción.");
+                this.mostrarAlerta("¡Atención!", "Debes ingresar al menos un equipo con Serial, Modelo y Descripción.");
                 return;
             }
 
             // 3️⃣ Cargar plantilla y llenarla
             const response = await fetch("Referencia.xlsx");
+            if (!response.ok) throw new Error("No se pudo cargar la plantilla Referencia.xlsx");
+            
             const blobPlantilla = await response.blob();
             const workbookPopulate = await XlsxPopulate.fromDataAsync(blobPlantilla);
             const sheet = workbookPopulate.sheet(0);
@@ -369,7 +461,7 @@ class SistemaGestionTecnica {
             // Llenar datos de equipos
             equipos.forEach((eq, i) => {
                 const f = filaBase + i;
-                sheet.cell(`B${f}`).value(datosGenerales.idCliente || "");
+                sheet.cell(`B${f}`).value(datosGenerales.idCliente);
                 sheet.cell(`C${f}`).value(eq.serial);
                 sheet.cell(`D${f}`).value(eq.modelo);
                 
@@ -380,7 +472,7 @@ class SistemaGestionTecnica {
                 
                 estadosOrden.forEach((estado, index) => {
                     const columna = String.fromCharCode(69 + index); // E=69, F=70, etc.
-                    sheet.cell(`${columna}${f}`).value(eq.estados[estado] || "N/A");
+                    sheet.cell(`${columna}${f}`).value(eq.estados[estado]);
                 });
 
                 sheet.cell(`T${f}`).value(eq.problema);
@@ -453,15 +545,15 @@ class SistemaGestionTecnica {
         try {
             // 1️⃣ Recolectar datos generales
             const datosGenerales = {
-                fecha: document.getElementById("fechaEntrega").value,
-                nombre: document.getElementById("nombreEntrega").value,
-                cedula: document.getElementById("cedulaEntrega").value,
-                cliente: document.getElementById("clienteEntrega").value,
-                idCliente: document.getElementById("idClienteEntrega").value,
-                ubicacion: document.getElementById("ubicacionEntrega").value,
-                observaciones: document.getElementById("observacionesEntrega").value,
-                nombreRecepcion: document.getElementById("nombreRecepcionEntrega").value,
-                cedulaRecepcion: document.getElementById("cedulaRecepcionEntrega").value
+                fecha: document.getElementById("fechaEntrega")?.value || "",
+                nombre: document.getElementById("nombreEntrega")?.value || "",
+                cedula: document.getElementById("cedulaEntrega")?.value || "",
+                cliente: document.getElementById("clienteEntrega")?.value || "",
+                idCliente: document.getElementById("idClienteEntrega")?.value || "",
+                ubicacion: document.getElementById("ubicacionEntrega")?.value || "",
+                observaciones: document.getElementById("observacionesEntrega")?.value || "",
+                nombreRecepcion: document.getElementById("nombreRecepcionEntrega")?.value || "",
+                cedulaRecepcion: document.getElementById("cedulaRecepcionEntrega")?.value || ""
             };
 
             // 2️⃣ Recolectar equipos
@@ -471,26 +563,36 @@ class SistemaGestionTecnica {
                 const modelo = item.querySelector(".modelo")?.value || "";
                 
                 // Estados de componentes
-                const estados = {};
-                item.querySelectorAll("select[class*='estado-']").forEach((sel) => {
-                    const className = Array.from(sel.classList).find(c => c.startsWith("estado-"));
-                    if (className) {
-                        estados[className.replace("estado-", "")] = sel.value;
-                    }
-                });
+                const estados = {
+                    lapiz: item.querySelector(".estado-lapiz")?.value || "N/A",
+                    cuerdaLapiz: item.querySelector(".estado-cuerdaLapiz")?.value || "N/A",
+                    correaMano: item.querySelector(".estado-correaMano")?.value || "N/A",
+                    pantalla: item.querySelector(".estado-pantalla")?.value || "N/A",
+                    base: item.querySelector(".estado-base")?.value || "N/A",
+                    cargador: item.querySelector(".estado-cargador")?.value || "N/A",
+                    bateria: item.querySelector(".estado-bateria")?.value || "N/A",
+                    cableUSB: item.querySelector(".estado-cableUSB")?.value || "N/A",
+                    estuche: item.querySelector(".estado-estuche")?.value || "N/A",
+                    empaque: item.querySelector(".estado-empaque")?.value || "N/A",
+                    tornillos: item.querySelector(".estado-tornillos")?.value || "N/A",
+                    tapa: item.querySelector(".estado-tapa")?.value || "N/A",
+                    gatillo: item.querySelector(".estado-gatillo")?.value || "N/A",
+                    botones: item.querySelector(".estado-botones")?.value || "N/A",
+                    audifonos: item.querySelector(".estado-audifonos")?.value || "N/A"
+                };
 
                 // Nuevos campos de entrega
                 const cambioRepuestos = item.querySelector(".cambio-repuestos")?.value || "";
                 const solucion = item.querySelector(".descripcion-solucion")?.value || "";
 
-                // Campos de verificación
+                // Campos de verificación (corregido los IDs únicos)
                 const verificacion = {
-                    rotulosWifi: item.querySelector(".rotulos-wifi")?.value || "",
-                    rotulosBluetooth: item.querySelector(".rotulos-bluetooth")?.value || "",
-                    rotulosCelular: item.querySelector(".rotulos-celular")?.value || "",
-                    pantallaAlineacion: item.querySelector(".pantalla-alineacion")?.value || "",
-                    lecturaEscaner: item.querySelector(".lectura-escaner")?.value || "",
-                    funcionamientoTeclado: item.querySelector(".funcionamiento-teclado")?.value || ""
+                    wifi: item.querySelector(".check-wifi")?.checked ? "✓" : "",
+                    bluetooth: item.querySelector(".check-bluetooth")?.checked ? "✓" : "",
+                    celular: item.querySelector(".check-celular")?.checked ? "✓" : "",
+                    pantalla: item.querySelector(".check-pantalla")?.checked ? "✓" : "",
+                    escaner: item.querySelector(".check-escaner")?.checked ? "✓" : "",
+                    teclado: item.querySelector(".check-teclado")?.checked ? "✓" : ""
                 };
 
                 if (serial && modelo && solucion) {
@@ -499,12 +601,14 @@ class SistemaGestionTecnica {
             });
 
             if (equipos.length === 0) {
-                this.mostrarAlerta("Debes ingresar al menos un equipo con Serial, Modelo y Solución.");
+                this.mostrarAlerta("¡Atención!", "Debes ingresar al menos un equipo con Serial, Modelo y Solución.");
                 return;
             }
 
             // 3️⃣ Cargar plantilla y llenarla
             const response = await fetch("ReferenciaEntrega.xlsx");
+            if (!response.ok) throw new Error("No se pudo cargar la plantilla ReferenciaEntrega.xlsx");
+            
             const blobPlantilla = await response.blob();
             const workbookPopulate = await XlsxPopulate.fromDataAsync(blobPlantilla);
             const sheet = workbookPopulate.sheet(0);
@@ -515,14 +619,14 @@ class SistemaGestionTecnica {
                 const f = filaBase + i;
                 
                 // Datos básicos
-                sheet.cell(`B${f}`).value(datosGenerales.idCliente || "");
+                sheet.cell(`B${f}`).value(datosGenerales.idCliente);
                 sheet.cell(`C${f}`).value(eq.serial);
                 sheet.cell(`D${f}`).value(eq.modelo);
 
                 // Estados de componentes (E7 a S7)
                 const estadosOrden = ["lapiz", "cuerdaLapiz", "correaMano", "pantalla", "base", "cargador", 
                                     "bateria", "cableUSB", "estuche", "empaque", "tornillos", "tapa", 
-                                    "gatillo", "botones", "audifonos", "manual"];
+                                    "gatillo", "botones", "audifonos"];
                 
                 estadosOrden.forEach((estado, index) => {
                     const columna = String.fromCharCode(69 + index); // E=69, F=70, etc.
@@ -531,12 +635,12 @@ class SistemaGestionTecnica {
 
                 // Campos específicos de entrega
                 sheet.cell(`T${f}`).value(eq.cambioRepuestos);
-                sheet.cell(`U${f}`).value(eq.verificacion.rotulosWifi);
-                sheet.cell(`V${f}`).value(eq.verificacion.rotulosBluetooth);
-                sheet.cell(`W${f}`).value(eq.verificacion.rotulosCelular);
-                sheet.cell(`X${f}`).value(eq.verificacion.pantallaAlineacion);
-                sheet.cell(`Y${f}`).value(eq.verificacion.lecturaEscaner);
-                sheet.cell(`Z${f}`).value(eq.verificacion.funcionamientoTeclado);
+                sheet.cell(`U${f}`).value(eq.verificacion.wifi);
+                sheet.cell(`V${f}`).value(eq.verificacion.bluetooth);
+                sheet.cell(`W${f}`).value(eq.verificacion.celular);
+                sheet.cell(`X${f}`).value(eq.verificacion.pantalla);
+                sheet.cell(`Y${f}`).value(eq.verificacion.escaner);
+                sheet.cell(`Z${f}`).value(eq.verificacion.teclado);
                 sheet.cell(`AA${f}`).value(eq.solucion);
             });
 
@@ -546,10 +650,10 @@ class SistemaGestionTecnica {
             sheet.find("{{IDCLIENTE}}").forEach(c => c.value(datosGenerales.idCliente));
             sheet.find("{{UBICACION}}").forEach(c => c.value(datosGenerales.ubicacion));
             sheet.find("{{OBSERVACIONES}}").forEach(c => c.value(datosGenerales.observaciones));
-            sheet.find("{{NOMBRE_RECIBE}}").forEach(c => c.value(datosGenerales.nombre));
-            sheet.find("{{CEDULA_RECIBE}}").forEach(c => c.value(datosGenerales.cedula));
-            sheet.find("{{NOMBRE_ENTREGA}}").forEach(c => c.value(datosGenerales.nombreRecepcion));
-            sheet.find("{{CEDULA_ENTREGA}}").forEach(c => c.value(datosGenerales.cedulaRecepcion));
+            sheet.find("{{NOMBRE_ENTREGA}}").forEach(c => c.value(datosGenerales.nombre));
+            sheet.find("{{CEDULA_ENTREGA}}").forEach(c => c.value(datosGenerales.cedula));
+            sheet.find("{{NOMBRE_RECIBE}}").forEach(c => c.value(datosGenerales.nombreRecepcion));
+            sheet.find("{{CEDULA_RECIBE}}").forEach(c => c.value(datosGenerales.cedulaRecepcion));
 
             // 4️⃣ Exportar a blob
             const blobPopulate = await workbookPopulate.outputAsync();
@@ -605,6 +709,11 @@ class SistemaGestionTecnica {
     // FUNCIÓN AGREGAR HOJA FOTOS
     // =====================
     async agregarHojaFotos(workbook, inputId) {
+        const fileInput = document.getElementById(inputId);
+        if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
+            return; // No hay archivos para agregar
+        }
+
         const hojaFotos = workbook.addWorksheet("FOTOS");
         hojaFotos.columns = [
             { width: 25 }, { width: 25 }, { width: 25 }, { width: 25 }
@@ -615,7 +724,7 @@ class SistemaGestionTecnica {
         hojaFotos.getCell("A1").font = { bold: true, size: 14 };
         hojaFotos.getCell("A1").alignment = { horizontal: "center" };
 
-        const archivos = document.getElementById(inputId).files;
+        const archivos = fileInput.files;
         let filaActual = 3;
         let col = 1;
 
@@ -623,21 +732,27 @@ class SistemaGestionTecnica {
             const file = archivos[i];
             if (!file.type.startsWith("image/")) continue;
             
-            const base64 = await this.archivoToBase64(file);
-            const imgId = workbook.addImage({
-                base64: base64,
-                extension: file.type.split("/")[1]
-            });
-            
-            hojaFotos.addImage(imgId, {
-                tl: { col: col - 1, row: filaActual - 1 },
-                br: { col: col, row: filaActual + 18 }
-            });
-            
-            col++;
-            if (col > 4) {
-                col = 1;
-                filaActual += 22;
+            try {
+                const base64 = await this.archivoToBase64(file);
+                const extension = file.type.split("/")[1] || "png";
+                
+                const imgId = workbook.addImage({
+                    base64: base64,
+                    extension: extension
+                });
+                
+                hojaFotos.addImage(imgId, {
+                    tl: { col: col - 1, row: filaActual - 1 },
+                    br: { col: col, row: filaActual + 18 }
+                });
+                
+                col++;
+                if (col > 4) {
+                    col = 1;
+                    filaActual += 22;
+                }
+            } catch (error) {
+                console.error(`Error procesando imagen ${file.name}:`, error);
             }
         }
     }
@@ -646,20 +761,34 @@ class SistemaGestionTecnica {
     // UTILIDADES
     // =====================
     mostrarAlerta(titulo, mensaje = "Se ha detectado un problema.") {
-        if (this.modalAlertTitle) this.modalAlertTitle.innerHTML = titulo;
-        if (this.modalAlertBody) this.modalAlertBody.textContent = mensaje;
-        if (this.modalAlert) this.modalAlert.show();
+        if (this.modalAlertTitle) {
+            this.modalAlertTitle.innerHTML = `<i class="bi bi-exclamation-triangle me-2"></i>${titulo}`;
+        }
+        if (this.modalAlertBody) {
+            this.modalAlertBody.textContent = mensaje;
+        }
+        if (this.modalAlert) {
+            this.modalAlert.show();
+        }
     }
 
     capitalize(str) {
+        if (!str) return '';
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
     archivoToBase64(archivo) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result.split(',')[1]);
-            reader.onerror = reject;
+            reader.onload = () => {
+                const result = reader.result;
+                if (typeof result === 'string') {
+                    resolve(result.split(',')[1]);
+                } else {
+                    reject(new Error('Error al leer el archivo'));
+                }
+            };
+            reader.onerror = () => reject(reader.error);
             reader.readAsDataURL(archivo);
         });
     }
