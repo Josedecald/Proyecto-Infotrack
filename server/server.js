@@ -24,17 +24,22 @@ const upload = multer({
 });
 
 // Configurar transporter de Nodemailer
+const emailPort = parseInt(process.env.EMAIL_PORT) || 465;
 const transporter = nodemailer.createTransport({
     host: process.env.EMAIL_HOST || 'smtp-mail.outlook.com',
-    port: parseInt(process.env.EMAIL_PORT) || 587,
-    secure: false,
+    port: emailPort,
+    secure: emailPort === 465, // true para 465 (SSL), false para 587 (TLS)
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
     },
     tls: {
-        rejectUnauthorized: false
-    }
+        rejectUnauthorized: false,
+        ciphers: 'SSLv3'
+    },
+    connectionTimeout: 10000, // 10 segundos
+    greetingTimeout: 10000,
+    socketTimeout: 10000
 });
 
 // Verificar conexión
