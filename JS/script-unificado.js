@@ -12,12 +12,26 @@ class SistemaGestionTecnica {
         this.signaturePads = {};
         this.firmasGuardadas = {};
         this.equiposAEliminar = {};
+
+        this.firmasGuardadas = {
+            recepcion: null,
+            entregaRecepcion: null,
+            entrega: null,
+            recepcionEntrega: null
+        };
+        
+        // Nuevas propiedades para envío de correo
+        this.archivoGenerado = null;
+        this.nombreArchivoGenerado = null;
+        this.tipoFormularioActual = null;
+        this.API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api' 
+        : '/api'; // Cambiar en producción
         
         this.init();
     }
 
     init() {
-        // Usar DOMContentLoaded correctamente
         if (document.readyState === 'loading') {
             document.addEventListener('DOMContentLoaded', () => this.inicializar());
         } else {
@@ -35,7 +49,6 @@ class SistemaGestionTecnica {
     // INICIALIZACIÓN
     // =====================
     inicializarModales() {
-        // Inicializar modales solo si existen los elementos
         const modalAlertElement = document.getElementById('staticBackdrop2');
         const modalConfirmarElement = document.getElementById('modalConfirmarEliminar');
         
@@ -55,7 +68,6 @@ class SistemaGestionTecnica {
             }
         }
         
-        // Elementos de alerta
         this.modalAlertTitle = document.querySelector('#staticBackdrop2 .modal-title');
         this.modalAlertBody = document.getElementById('modalAlertBody');
     }
@@ -107,6 +119,20 @@ class SistemaGestionTecnica {
 
         // Firmas
         this.inicializarFirmas();
+        
+        // Eventos para envío de correo
+        const btnConfirmarEnvio = document.getElementById('btnConfirmarEnvio');
+        if (btnConfirmarEnvio) {
+            btnConfirmarEnvio.addEventListener('click', () => this.enviarCorreo());
+        }
+
+        // Validación en tiempo real del correo
+        const correoInput = document.getElementById('correoDestinatario');
+        if (correoInput) {
+            correoInput.addEventListener('input', (e) => {
+                this.validarCorreoInput(e.target);
+            });
+        }
     }
 
     // =====================
@@ -115,7 +141,9 @@ class SistemaGestionTecnica {
     inicializarFirmas() {
         const modalesFirma = [
             { modal: 'modalFirmaRecepcion', canvas: 'firmaCanvasRecepcion', tipo: 'recepcion' },
-            { modal: 'modalFirmaEntrega', canvas: 'firmaCanvasEntrega', tipo: 'entrega' }
+            { modal: 'modalFirmaEntrega', canvas: 'firmaCanvasEntrega', tipo: 'entrega' },
+            { modal: 'modalFirmaEntregaRecepcion', canvas: 'firmaCanvasEntregaRecepcion', tipo: 'entregaRecepcion' },
+            { modal: 'modalFirmaRecepcionEntrega', canvas: 'firmaCanvasRecepcionEntrega', tipo: 'recepcionEntrega' }
         ];
 
         modalesFirma.forEach(({ modal, canvas, tipo }) => {
@@ -132,12 +160,10 @@ class SistemaGestionTecnica {
                 return;
             }
 
-            // Evento al mostrar modal
             modalElement.addEventListener('shown.bs.modal', () => {
                 this.inicializarSignaturePad(canvas, tipo);
             });
 
-            // Botones limpiar
             const btnLimpiar = document.getElementById(`limpiarFirma${this.capitalize(tipo)}`);
             if (btnLimpiar) {
                 btnLimpiar.addEventListener('click', () => {
@@ -145,7 +171,6 @@ class SistemaGestionTecnica {
                 });
             }
 
-            // Botones guardar
             const btnGuardar = document.getElementById(`guardarFirma${this.capitalize(tipo)}`);
             if (btnGuardar) {
                 btnGuardar.addEventListener('click', () => {
@@ -159,21 +184,17 @@ class SistemaGestionTecnica {
         const canvas = document.getElementById(canvasId);
         if (!canvas) return;
 
-        // Destruir pad existente
         if (this.signaturePads[tipo]) {
             this.signaturePads[tipo].off();
         }
 
-        // Ajustar tamaño
         this.ajustarTamanoCanvas(canvas);
 
-        // Crear nuevo pad
         this.signaturePads[tipo] = new SignaturePad(canvas, {
             backgroundColor: "rgba(255,255,255,0)",
             penColor: "rgb(0, 0, 0)"
         });
 
-        // Restaurar firma si existe
         if (this.firmasGuardadas[tipo]) {
             const img = new Image();
             img.onload = () => {
@@ -207,14 +228,17 @@ class SistemaGestionTecnica {
         const pad = this.signaturePads[tipo];
         if (pad && !pad.isEmpty()) {
             this.firmasGuardadas[tipo] = pad.toDataURL("image/png");
-            const imgPreview = document.getElementById(`imgPreviewFirma${this.capitalize(tipo)}`);
-            const previewContainer = document.getElementById(`previewFirma${this.capitalize(tipo)}`);
+            
+            const sufijo = this.capitalize(tipo);
+            const imgPreview = document.getElementById(`imgPreviewFirma${sufijo}`);
+            const previewContainer = document.getElementById(`previewFirma${sufijo}`);
             
             if (imgPreview) imgPreview.src = this.firmasGuardadas[tipo];
             if (previewContainer) previewContainer.style.display = "block";
         } else {
             this.firmasGuardadas[tipo] = null;
-            const previewContainer = document.getElementById(`previewFirma${this.capitalize(tipo)}`);
+            const sufijo = this.capitalize(tipo);
+            const previewContainer = document.getElementById(`previewFirma${sufijo}`);
             if (previewContainer) previewContainer.style.display = "none";
         }
     }
@@ -273,7 +297,6 @@ class SistemaGestionTecnica {
         
         const nuevoEquipo = primerEquipo.cloneNode(true);
 
-        // Limpiar campos
         nuevoEquipo.querySelectorAll('input, textarea, select').forEach(el => {
             if (el.tagName === 'SELECT') {
                 el.value = tipo === 'recepcion' ? 'N/A' : '';
@@ -288,7 +311,6 @@ class SistemaGestionTecnica {
         const collapseID = `collapse${this.capitalize(tipo)}${this.contadores[tipo]}`;
         const headerID = `heading-${tipo}-${this.contadores[tipo]}`;
 
-        // Actualizar IDs y atributos
         const header = nuevoEquipo.querySelector('.accordion-header');
         if (header) header.setAttribute('id', headerID);
         
@@ -306,14 +328,12 @@ class SistemaGestionTecnica {
             collapseDiv.classList.remove('show');
         }
 
-        // Configurar botones
         const removeBtn = nuevoEquipo.querySelector('.remove-equipo');
         const removerBtn = nuevoEquipo.querySelector('.remover-equipo');
         
         if (removeBtn) removeBtn.style.display = 'block';
         if (removerBtn) removerBtn.style.display = 'none';
 
-        // Configurar eventos del acordeón
         if (collapseDiv) {
             this.configurarAcordeon(collapseDiv, tipo, false);
         }
@@ -331,7 +351,6 @@ class SistemaGestionTecnica {
         const container = equipoItem.closest('[id^="accordionEquipos"]');
         if (!container) return;
 
-        // Determinar tipo (recepcion o entrega)
         const tipo = container.id.includes('Recepcion') ? 'recepcion' : 'entrega';
 
         if (this.contadores[tipo] > 1) {
@@ -345,7 +364,6 @@ class SistemaGestionTecnica {
     }
 
     confirmarEliminacion() {
-        // Encontrar qué tipo de equipo se está eliminando
         for (const tipo in this.equiposAEliminar) {
             if (this.equiposAEliminar[tipo]) {
                 this.equiposAEliminar[tipo].remove();
@@ -386,20 +404,199 @@ class SistemaGestionTecnica {
             return;
         }
 
-        // Generar archivo según el tipo
-        if (tipo === 'recepcion') {
-            this.generarExcelRecepcion();
-        } else {
-            this.generarExcelEntrega();
-        }
+        // Guardar tipo de formulario actual
+        this.tipoFormularioActual = tipo;
+
+        // Mostrar modal para elegir acción
+        this.mostrarModalAccion();
     }
 
     // =====================
-    // GENERACIÓN DE EXCEL - RECEPCIÓN
+    // NUEVAS FUNCIONES PARA ENVÍO DE CORREO
     // =====================
-    async generarExcelRecepcion() {
+    mostrarModalAccion() {
+        let modalAccion = document.getElementById('modalAccionDocumento');
+        if (!modalAccion) {
+            this.crearModalAccion();
+        }
+        
+        const modalBS = new bootstrap.Modal(document.getElementById('modalAccionDocumento'));
+        modalBS.show();
+    }
+
+    crearModalAccion() {
+        const modalHTML = `
+            <div class="modal fade" id="modalAccionDocumento" tabindex="-1" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg">
+                        <div class="modal-header bg-primary text-white">
+                            <h5 class="modal-title">
+                                <i class="bi bi-file-earmark-check me-2"></i>¿Qué deseas hacer?
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body text-center py-4">
+                            <p class="mb-4">Elige una opción para tu documento:</p>
+                            <div class="d-grid gap-3">
+                                <button type="button" class="btn btn-lg btn-primary" id="btnDescargarDirecto">
+                                    <i class="bi bi-download me-2"></i>Descargar al Computador
+                                </button>
+                                <button type="button" class="btn btn-lg btn-outline-primary" id="btnEnviarCorreo">
+                                    <i class="bi bi-envelope-fill me-2"></i>Enviar por Correo Electrónico
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        
+        document.getElementById('btnDescargarDirecto').addEventListener('click', () => {
+            bootstrap.Modal.getInstance(document.getElementById('modalAccionDocumento')).hide();
+            this.procesarGeneracion(false);
+        });
+        
+        document.getElementById('btnEnviarCorreo').addEventListener('click', () => {
+            bootstrap.Modal.getInstance(document.getElementById('modalAccionDocumento')).hide();
+            this.procesarGeneracion(true);
+        });
+    }
+
+    async procesarGeneracion(enviarCorreo) {
         try {
-            // 1️⃣ Recolectar datos generales
+            let resultado;
+            
+            if (this.tipoFormularioActual === 'recepcion') {
+                resultado = await this.generarExcelRecepcion(true);
+            } else {
+                resultado = await this.generarExcelEntrega(true);
+            }
+
+            this.archivoGenerado = resultado.blob;
+            this.nombreArchivoGenerado = resultado.nombre;
+
+            if (enviarCorreo) {
+                this.mostrarModalEnvioCorreo();
+            } else {
+                saveAs(resultado.blob, resultado.nombre);
+                this.mostrarMensajeExito('Documento descargado exitosamente');
+            }
+
+        } catch (error) {
+            console.error('Error procesando documento:', error);
+            this.mostrarAlerta('Error', 'Hubo un problema al generar el documento: ' + error.message);
+        }
+    }
+
+    mostrarModalEnvioCorreo() {
+        document.getElementById('correoDestinatario').value = '';
+        document.getElementById('asuntoCorreo').value = '';
+        document.getElementById('mensajeCorreo').value = '';
+        document.getElementById('estadoEnvio').classList.add('d-none');
+        document.getElementById('correoDestinatario').classList.remove('is-valid', 'is-invalid');
+        
+        const modalBS = new bootstrap.Modal(document.getElementById('modalEnviarCorreo'));
+        modalBS.show();
+    }
+
+    validarCorreoInput(input) {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (input.value && !emailRegex.test(input.value)) {
+            input.classList.add('is-invalid');
+            input.classList.remove('is-valid');
+        } else if (input.value) {
+            input.classList.remove('is-invalid');
+            input.classList.add('is-valid');
+        } else {
+            input.classList.remove('is-invalid', 'is-valid');
+        }
+    }
+
+    async enviarCorreo() {
+        const destinatario = document.getElementById('correoDestinatario').value.trim();
+        const asunto = document.getElementById('asuntoCorreo').value.trim();
+        const mensaje = document.getElementById('mensajeCorreo').value.trim();
+        
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!destinatario || !emailRegex.test(destinatario)) {
+            this.mostrarEstadoEnvio('error', 'Por favor ingresa un correo válido');
+            document.getElementById('correoDestinatario').classList.add('is-invalid');
+            return;
+        }
+
+        if (!this.archivoGenerado) {
+            this.mostrarEstadoEnvio('error', 'No hay archivo para enviar');
+            return;
+        }
+
+        const btnEnviar = document.getElementById('btnConfirmarEnvio');
+        const spinner = document.getElementById('spinnerEnvio');
+        btnEnviar.disabled = true;
+        spinner.classList.remove('d-none');
+
+        try {
+            const formData = new FormData();
+            formData.append('archivo', this.archivoGenerado, this.nombreArchivoGenerado);
+            formData.append('destinatario', destinatario);
+            formData.append('asunto', asunto || `Documento Técnico - ${this.tipoFormularioActual}`);
+            formData.append('mensaje', mensaje || 'Se adjunta el documento solicitado.');
+            formData.append('nombreArchivo', this.nombreArchivoGenerado);
+
+            const response = await fetch(`${this.API_URL}/enviar-correo`, {
+                method: 'POST',
+                body: formData
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                this.mostrarEstadoEnvio('success', '✅ Correo enviado exitosamente');
+                setTimeout(() => {
+                    bootstrap.Modal.getInstance(document.getElementById('modalEnviarCorreo')).hide();
+                    this.mostrarMensajeExito('Documento enviado por correo exitosamente');
+                }, 2000);
+            } else {
+                this.mostrarEstadoEnvio('error', '❌ ' + data.message);
+            }
+
+        } catch (error) {
+            console.error('Error al enviar correo:', error);
+            this.mostrarEstadoEnvio('error', '❌ Error de conexión. Verifica que el servidor esté corriendo.');
+        } finally {
+            btnEnviar.disabled = false;
+            spinner.classList.add('d-none');
+        }
+    }
+
+    mostrarEstadoEnvio(tipo, mensaje) {
+        const estadoDiv = document.getElementById('estadoEnvio');
+        estadoDiv.className = `alert ${tipo === 'success' ? 'alert-success' : 'alert-danger'}`;
+        estadoDiv.textContent = mensaje;
+        estadoDiv.classList.remove('d-none');
+    }
+
+    mostrarMensajeExito(mensaje) {
+        const alertHTML = `
+            <div class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" 
+                 role="alert" style="z-index: 9999;">
+                <i class="bi bi-check-circle-fill me-2"></i>${mensaje}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', alertHTML);
+        
+        setTimeout(() => {
+            document.querySelector('.alert-success')?.remove();
+        }, 3000);
+    }
+
+    // =====================
+    // GENERACIÓN DE EXCEL - RECEPCIÓN (MODIFICADA)
+    // =====================
+    async generarExcelRecepcion(retornarBlob = false) {
+        try {
             const datosGenerales = {
                 fecha: document.getElementById("fechaRecepcion")?.value || "",
                 nombre: document.getElementById("nombreRecepcion")?.value || "",
@@ -412,7 +609,6 @@ class SistemaGestionTecnica {
                 cedulaEntrega: document.getElementById("cedulaEntregaRecepcion")?.value || ""
             };
 
-            // 2️⃣ Recolectar equipos
             const equipos = [];
             document.querySelectorAll("#accordionEquiposRecepcion .equipo-item").forEach((item) => {
                 const serial = item.querySelector(".serial")?.value || "";
@@ -448,7 +644,6 @@ class SistemaGestionTecnica {
                 return;
             }
 
-            // 3️⃣ Cargar plantilla y llenarla
             const response = await fetch("Referencia.xlsx");
             if (!response.ok) throw new Error("No se pudo cargar la plantilla Referencia.xlsx");
             
@@ -458,27 +653,24 @@ class SistemaGestionTecnica {
             const filaBase = 7;
             const maxEquipos = 20;
 
-            // Llenar datos de equipos
             equipos.forEach((eq, i) => {
                 const f = filaBase + i;
                 sheet.cell(`B${f}`).value(datosGenerales.idCliente);
                 sheet.cell(`C${f}`).value(eq.serial);
                 sheet.cell(`D${f}`).value(eq.modelo);
                 
-                // Estados de componentes (E7 a S7)
                 const estadosOrden = ["lapiz", "cuerdaLapiz", "correaMano", "pantalla", "base", "cargador", 
                                     "bateria", "cableUSB", "estuche", "empaque", "tornillos", "tapa", 
                                     "gatillo", "botones", "audifonos", "manual"];
                 
                 estadosOrden.forEach((estado, index) => {
-                    const columna = String.fromCharCode(69 + index); // E=69, F=70, etc.
+                    const columna = String.fromCharCode(69 + index);
                     sheet.cell(`${columna}${f}`).value(eq.estados[estado]);
                 });
 
                 sheet.cell(`T${f}`).value(eq.problema);
             });
 
-            // Ocultar filas no usadas
             if (equipos.length < maxEquipos) {
                 for (let f = filaBase + equipos.length; f < filaBase + maxEquipos; f++) {
                     sheet.range(`B${f}:T${f}`).value("");
@@ -486,7 +678,6 @@ class SistemaGestionTecnica {
                 }
             }
 
-            // Reemplazar placeholders generales
             sheet.find("{{FECHA}}").forEach(c => c.value(datosGenerales.fecha));
             sheet.find("{{CLIENTE}}").forEach(c => c.value(datosGenerales.cliente));
             sheet.find("{{NOMBRE_RECIBE}}").forEach(c => c.value(datosGenerales.nombre));
@@ -497,16 +688,13 @@ class SistemaGestionTecnica {
             sheet.find("{{CEDULA_ENTREGA}}").forEach(c => c.value(datosGenerales.cedulaEntrega));
             sheet.find("{{ID_CLIENTE}}").forEach(c => c.value(datosGenerales.idCliente));
 
-            // 4️⃣ Exportar a blob
             const blobPopulate = await workbookPopulate.outputAsync();
 
-            // 5️⃣ Reabrir con ExcelJS para agregar imágenes
             const workbookExcelJS = new ExcelJS.Workbook();
             await workbookExcelJS.xlsx.load(await blobPopulate.arrayBuffer());
 
             const hojaPrincipal = workbookExcelJS.worksheets[0];
 
-            // Agregar firma
             if (this.firmasGuardadas.recepcion) {
                 const firmaBase64 = this.firmasGuardadas.recepcion.replace(/^data:image\/png;base64,/, "");
                 const firmaId = workbookExcelJS.addImage({
@@ -520,17 +708,33 @@ class SistemaGestionTecnica {
                 });
             }
 
-            // Agregar hoja de fotos
+            if (this.firmasGuardadas.entregaRecepcion) {
+                const firmaBase642 = this.firmasGuardadas.entregaRecepcion.replace(/^data:image\/png;base64,/, "");
+                const firmaId2 = workbookExcelJS.addImage({
+                    base64: firmaBase642,
+                    extension: "png"
+                });
+
+                hojaPrincipal.addImage(firmaId2, {
+                    tl: { col: 1, row: 31 },
+                    ext: { width: 300, height: 100 }
+                });
+            }
+
             await this.agregarHojaFotos(workbookExcelJS, "evidenciasRecepcion");
 
-            // 6️⃣ Descargar archivo final
             const bufferFinal = await workbookExcelJS.xlsx.writeBuffer();
             const blobFinal = new Blob([bufferFinal], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             });
 
             const nombreArchivo = `Recepcion_${datosGenerales.cliente}_${equipos.length}_equipos_${datosGenerales.fecha}_${datosGenerales.ubicacion}.xlsx`;
-            saveAs(blobFinal, nombreArchivo);
+            
+            if (retornarBlob) {
+                return { blob: blobFinal, nombre: nombreArchivo };
+            } else {
+                saveAs(blobFinal, nombreArchivo);
+            }
 
         } catch (error) {
             console.error("Error generando recepción:", error);
@@ -539,11 +743,10 @@ class SistemaGestionTecnica {
     }
 
     // =====================
-    // GENERACIÓN DE EXCEL - ENTREGA
+    // GENERACIÓN DE EXCEL - ENTREGA (MODIFICADA)
     // =====================
-    async generarExcelEntrega() {
+    async generarExcelEntrega(retornarBlob = false) {
         try {
-            // 1️⃣ Recolectar datos generales
             const datosGenerales = {
                 fecha: document.getElementById("fechaEntrega")?.value || "",
                 nombre: document.getElementById("nombreEntrega")?.value || "",
@@ -556,13 +759,11 @@ class SistemaGestionTecnica {
                 cedulaRecepcion: document.getElementById("cedulaRecepcionEntrega")?.value || ""
             };
 
-            // 2️⃣ Recolectar equipos
             const equipos = [];
             document.querySelectorAll("#accordionEquiposEntrega .equipo-item").forEach((item) => {
                 const serial = item.querySelector(".serial")?.value || "";
                 const modelo = item.querySelector(".modelo")?.value || "";
                 
-                // Estados de componentes
                 const estados = {
                     lapiz: item.querySelector(".estado-lapiz")?.value || "N/A",
                     cuerdaLapiz: item.querySelector(".estado-cuerdaLapiz")?.value || "N/A",
@@ -581,11 +782,9 @@ class SistemaGestionTecnica {
                     audifonos: item.querySelector(".estado-audifonos")?.value || "N/A"
                 };
 
-                // Nuevos campos de entrega
                 const cambioRepuestos = item.querySelector(".cambio-repuestos")?.value || "";
                 const solucion = item.querySelector(".descripcion-solucion")?.value || "";
 
-                // Campos de verificación (corregido los IDs únicos)
                 const verificacion = {
                     wifi: item.querySelector(".check-wifi")?.checked ? "✓" : "",
                     bluetooth: item.querySelector(".check-bluetooth")?.checked ? "✓" : "",
@@ -605,7 +804,6 @@ class SistemaGestionTecnica {
                 return;
             }
 
-            // 3️⃣ Cargar plantilla y llenarla
             const response = await fetch("ReferenciaEntrega.xlsx");
             if (!response.ok) throw new Error("No se pudo cargar la plantilla ReferenciaEntrega.xlsx");
             
@@ -614,26 +812,22 @@ class SistemaGestionTecnica {
             const sheet = workbookPopulate.sheet(0);
             const filaBase = 7;
 
-            // Llenar datos de equipos
             equipos.forEach((eq, i) => {
                 const f = filaBase + i;
                 
-                // Datos básicos
                 sheet.cell(`B${f}`).value(datosGenerales.idCliente);
                 sheet.cell(`C${f}`).value(eq.serial);
                 sheet.cell(`D${f}`).value(eq.modelo);
 
-                // Estados de componentes (E7 a S7)
                 const estadosOrden = ["lapiz", "cuerdaLapiz", "correaMano", "pantalla", "base", "cargador", 
                                     "bateria", "cableUSB", "estuche", "empaque", "tornillos", "tapa", 
                                     "gatillo", "botones", "audifonos"];
                 
                 estadosOrden.forEach((estado, index) => {
-                    const columna = String.fromCharCode(69 + index); // E=69, F=70, etc.
+                    const columna = String.fromCharCode(69 + index);
                     sheet.cell(`${columna}${f}`).value(eq.estados[estado] || "N/A");
                 });
 
-                // Campos específicos de entrega
                 sheet.cell(`T${f}`).value(eq.cambioRepuestos);
                 sheet.cell(`U${f}`).value(eq.verificacion.wifi);
                 sheet.cell(`V${f}`).value(eq.verificacion.bluetooth);
@@ -644,7 +838,6 @@ class SistemaGestionTecnica {
                 sheet.cell(`AA${f}`).value(eq.solucion);
             });
 
-            // Reemplazar placeholders generales
             sheet.find("{{FECHA}}").forEach(c => c.value(datosGenerales.fecha));
             sheet.find("{{CLIENTE}}").forEach(c => c.value(datosGenerales.cliente));
             sheet.find("{{IDCLIENTE}}").forEach(c => c.value(datosGenerales.idCliente));
@@ -655,16 +848,13 @@ class SistemaGestionTecnica {
             sheet.find("{{NOMBRE_RECIBE}}").forEach(c => c.value(datosGenerales.nombreRecepcion));
             sheet.find("{{CEDULA_RECIBE}}").forEach(c => c.value(datosGenerales.cedulaRecepcion));
 
-            // 4️⃣ Exportar a blob
             const blobPopulate = await workbookPopulate.outputAsync();
 
-            // 5️⃣ Reabrir con ExcelJS para agregar imágenes
             const workbookExcelJS = new ExcelJS.Workbook();
             await workbookExcelJS.xlsx.load(await blobPopulate.arrayBuffer());
 
             const hojaPrincipal = workbookExcelJS.worksheets[0];
 
-            // Mostrar filas ocultas si hay más de 1 equipo
             if (equipos.length > 1) {
                 for (let i = 1; i < equipos.length; i++) {
                     const fila = filaBase + i;
@@ -673,7 +863,6 @@ class SistemaGestionTecnica {
                 }
             }
 
-            // Agregar firma
             if (this.firmasGuardadas.entrega) {
                 const firmaBase64 = this.firmasGuardadas.entrega.replace(/^data:image\/png;base64,/, "");
                 const firmaId = workbookExcelJS.addImage({ 
@@ -682,22 +871,38 @@ class SistemaGestionTecnica {
                 });
                 
                 hojaPrincipal.addImage(firmaId, { 
-                    tl: { col: 5, row: 29 }, 
+                    tl: { col: 1, row: 29 }, 
                     ext: { width: 300, height: 100 } 
                 });
             }
 
-            // Agregar hoja de fotos
+            if (this.firmasGuardadas.recepcionEntrega) {
+                const firmaBase642 = this.firmasGuardadas.recepcionEntrega.replace(/^data:image\/png;base64,/, "");
+                const firmaId2 = workbookExcelJS.addImage({ 
+                    base64: firmaBase642, 
+                    extension: "png" 
+                });
+                
+                hojaPrincipal.addImage(firmaId2, { 
+                    tl: { col: 5, row: 29 },
+                    ext: { width: 300, height: 100 } 
+                });
+            }
+
             await this.agregarHojaFotos(workbookExcelJS, "evidenciasEntrega");
 
-            // 6️⃣ Descargar archivo final
             const bufferFinal = await workbookExcelJS.xlsx.writeBuffer();
             const blobFinal = new Blob([bufferFinal], {
                 type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             });
 
             const nombreArchivo = `Entrega_${datosGenerales.cliente}_${equipos.length}_equipos_${datosGenerales.fecha}_${datosGenerales.ubicacion}.xlsx`;
-            saveAs(blobFinal, nombreArchivo);
+            
+            if (retornarBlob) {
+                return { blob: blobFinal, nombre: nombreArchivo };
+            } else {
+                saveAs(blobFinal, nombreArchivo);
+            }
 
         } catch (error) {
             console.error("Error generando entrega:", error);
@@ -711,7 +916,7 @@ class SistemaGestionTecnica {
     async agregarHojaFotos(workbook, inputId) {
         const fileInput = document.getElementById(inputId);
         if (!fileInput || !fileInput.files || fileInput.files.length === 0) {
-            return; // No hay archivos para agregar
+            return;
         }
 
         const hojaFotos = workbook.addWorksheet("FOTOS");
