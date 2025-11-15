@@ -26,14 +26,18 @@ const upload = multer({
 // Configurar transporter de Nodemailer
 const emailPort = parseInt(process.env.EMAIL_PORT) || 465;
 const transporter = nodemailer.createTransport({
-    host: process.env.EMAIL_HOST,
-    port: Number(process.env.EMAIL_PORT),
-    secure: true, // Gmail usa SSL en 465
+    host: process.env.EMAIL_HOST || "smtp.gmail.com",
+    port: Number(process.env.EMAIL_PORT) || 465,
+    secure: Number(process.env.EMAIL_PORT) === 465, // SSL solo en 465
     auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
+    },
+    tls: {
+        rejectUnauthorized: false
     }
 });
+
 
 
 
