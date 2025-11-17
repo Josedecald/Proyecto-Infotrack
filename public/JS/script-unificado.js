@@ -24,9 +24,13 @@ class SistemaGestionTecnica {
         this.archivoGenerado = null;
         this.nombreArchivoGenerado = null;
         this.tipoFormularioActual = null;
-        this.API_URL = window.location.hostname === 'localhost' 
+
+
+        this.API_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
         ? 'http://localhost:3000/api' 
-        : '/api'; // Cambiar en producción
+        : '/api'; // En producción (Railway) usa ruta relativa
+    
+        console.log('🔧 API URL configurada:', this.API_URL);
         
         this.init();
     }
@@ -490,16 +494,82 @@ class SistemaGestionTecnica {
         }
     }
 
-    mostrarModalEnvioCorreo() {
-        document.getElementById('correoDestinatario').value = '';
-        document.getElementById('asuntoCorreo').value = '';
-        document.getElementById('mensajeCorreo').value = '';
-        document.getElementById('estadoEnvio').classList.add('d-none');
-        document.getElementById('correoDestinatario').classList.remove('is-valid', 'is-invalid');
-        
-        const modalBS = new bootstrap.Modal(document.getElementById('modalEnviarCorreo'));
-        modalBS.show();
+mostrarModalEnvioCorreo() {
+    const modalElement = document.getElementById('modalEnviarCorreo');
+    
+    if (!modalElement) {
+        console.error('❌ Modal modalEnviarCorreo no encontrado en el HTML');
+        this.mostrarAlerta('Error', 'No se puede mostrar el formulario de envío. Recarga la página.');
+        return;
     }
+
+    // Limpiar campo de correo
+    const correoInput = document.getElementById('correoDestinatario');
+    const estadoDiv = document.getElementById('estadoEnvio');
+
+    if (correoInput) correoInput.value = '';
+    if (estadoDiv) estadoDiv.classList.add('d-none');
+    if (correoInput) correoInput.classList.remove('is-valid', 'is-invalid');
+    
+    // Actualizar vista previa según el tipo de documento
+    this.actualizarPreviewCorreo();
+    
+    // Mostrar modal
+    const modalBS = new bootstrap.Modal(modalElement);
+    modalBS.show();
+}
+
+actualizarPreviewCorreo() {
+    const esRecepcion = this.tipoFormularioActual === 'recepcion';
+    const tipoDoc = esRecepcion ? 'Recepción Técnica' : 'Entrega Técnica';
+    const icono = esRecepcion ? '📥' : '📤';
+    
+    // Obtener información del formulario
+    const cliente = esRecepcion 
+        ? document.getElementById('clienteRecepcion')?.value || '[Cliente]'
+        : document.getElementById('clienteEntrega')?.value || '[Cliente]';
+    
+    const fecha = esRecepcion
+        ? document.getElementById('fechaRecepcion')?.value || 'N/A'
+        : document.getElementById('fechaEntrega')?.value || 'N/A';
+    
+    // Formatear fecha
+    let fechaFormateada = fecha;
+    if (fecha !== 'N/A') {
+        const [year, month, day] = fecha.split('-');
+        fechaFormateada = `${day}/${month}/${year}`;
+    }
+    
+    // Actualizar asunto
+    const previewAsunto = document.getElementById('previewAsunto');
+    if (previewAsunto) {
+        previewAsunto.innerHTML = `
+            ${icono} <strong>Documento de ${tipoDoc}</strong> - ${cliente}
+        `;
+    }
+    
+    // Actualizar mensaje
+    const previewMensaje = document.getElementById('previewMensaje');
+    if (previewMensaje) {
+        previewMensaje.innerHTML = `
+            Estimado/a,<br><br>
+            Le enviamos el documento de <strong>${tipoDoc}</strong> correspondiente al servicio técnico realizado 
+            para <strong>${cliente}</strong> con fecha <strong>${fechaFormateada}</strong>.<br><br>
+            El archivo adjunto contiene toda la información detallada incluyendo:
+            <ul class="mb-2 mt-2">
+                <li>Datos del ${esRecepcion ? 'equipo recibido' : 'equipo entregado'}</li>
+                <li>Estado de componentes</li>
+                ${esRecepcion ? '<li>Descripción del problema reportado</li>' : '<li>Soluciones aplicadas</li>'}
+                <li>Firmas digitales de las partes</li>
+                <li>Evidencias fotográficas (si aplica)</li>
+            </ul>
+            Por favor, descargue el documento y guárdelo para sus registros.<br><br>
+            Si tiene alguna consulta o requiere información adicional, no dude en contactarnos.<br><br>
+            Cordialmente,<br>
+            <strong>Sistema de Gestión Técnica</strong>
+        `;
+    }
+}
 
     validarCorreoInput(input) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -514,64 +584,83 @@ class SistemaGestionTecnica {
         }
     }
 
-    async enviarCorreo() {
-        const destinatario = document.getElementById('correoDestinatario').value.trim();
-        const asunto = document.getElementById('asuntoCorreo').value.trim();
-        const mensaje = document.getElementById('mensajeCorreo').value.trim();
-        
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!destinatario || !emailRegex.test(destinatario)) {
-            this.mostrarEstadoEnvio('error', 'Por favor ingresa un correo válido');
-            document.getElementById('correoDestinatario').classList.add('is-invalid');
-            return;
-        }
-
-        if (!this.archivoGenerado) {
-            this.mostrarEstadoEnvio('error', 'No hay archivo para enviar');
-            return;
-        }
-
-        const btnEnviar = document.getElementById('btnConfirmarEnvio');
-        const spinner = document.getElementById('spinnerEnvio');
-        btnEnviar.disabled = true;
-        spinner.classList.remove('d-none');
-
-        try {
-            const formData = new FormData();
-            formData.append('archivo', this.archivoGenerado, this.nombreArchivoGenerado);
-            formData.append('destinatario', destinatario);
-            formData.append('asunto', asunto || `Documento Técnico - ${this.tipoFormularioActual}`);
-            formData.append('mensaje', mensaje || 'Se adjunta el documento solicitado.');
-            formData.append('nombreArchivo', this.nombreArchivoGenerado);
-
-            const response = await fetch(`${this.API_URL}/enviar-correo`, {
-                method: 'POST',
-                body: formData
-            });
-
-            const data = await response.json();
-
-            if (data.success) {
-                this.mostrarEstadoEnvio('success', '✅ Correo enviado exitosamente');
-                setTimeout(() => {
-                    bootstrap.Modal.getInstance(document.getElementById('modalEnviarCorreo')).hide();
-                    this.mostrarMensajeExito('Documento enviado por correo exitosamente');
-                }, 2000);
-            } else {
-                this.mostrarEstadoEnvio('error', '❌ ' + data.message);
-            }
-
-        } catch (error) {
-            console.error('Error al enviar correo:', error);
-            this.mostrarEstadoEnvio('error', '❌ Error de conexión. Verifica que el servidor esté corriendo.');
-        } finally {
-            btnEnviar.disabled = false;
-            spinner.classList.add('d-none');
-        }
+ async enviarCorreo() {
+    const destinatario = document.getElementById('correoDestinatario')?.value.trim();
+    const asunto = document.getElementById('asuntoCorreo')?.value.trim();
+    const mensaje = document.getElementById('mensajeCorreo')?.value.trim();
+    
+    // Validar email
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!destinatario || !emailRegex.test(destinatario)) {
+        this.mostrarEstadoEnvio('error', 'Por favor ingresa un correo válido');
+        const correoInput = document.getElementById('correoDestinatario');
+        if (correoInput) correoInput.classList.add('is-invalid');
+        return;
     }
+
+    if (!this.archivoGenerado) {
+        this.mostrarEstadoEnvio('error', 'No hay archivo para enviar');
+        return;
+    }
+
+    const btnEnviar = document.getElementById('btnConfirmarEnvio');
+    const spinner = document.getElementById('spinnerEnvio');
+    
+    if (btnEnviar) btnEnviar.disabled = true;
+    if (spinner) spinner.classList.remove('d-none');
+
+    try {
+        const formData = new FormData();
+        formData.append('archivo', this.archivoGenerado, this.nombreArchivoGenerado);
+        formData.append('destinatario', destinatario);
+        formData.append('asunto', asunto || `Documento Técnico - ${this.tipoFormularioActual}`);
+        formData.append('mensaje', mensaje || 'Se adjunta el documento solicitado.');
+        formData.append('nombreArchivo', this.nombreArchivoGenerado);
+
+        console.log('📤 Enviando a:', `${this.API_URL}/enviar-correo`);
+        console.log('📧 Destinatario:', destinatario);
+
+        const response = await fetch(`${this.API_URL}/enviar-correo`, {
+            method: 'POST',
+            body: formData
+        });
+
+        console.log('📡 Respuesta recibida:', response.status);
+
+        if (!response.ok) {
+            throw new Error(`Error del servidor: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log('✅ Respuesta:', data);
+
+        if (data.success) {
+            this.mostrarEstadoEnvio('success', '✅ Correo enviado exitosamente');
+            setTimeout(() => {
+                const modalElement = document.getElementById('modalEnviarCorreo');
+                if (modalElement) {
+                    const modalInstance = bootstrap.Modal.getInstance(modalElement);
+                    if (modalInstance) modalInstance.hide();
+                }
+                this.mostrarMensajeExito('Documento enviado por correo exitosamente');
+            }, 2000);
+        } else {
+            this.mostrarEstadoEnvio('error', '❌ ' + (data.message || 'Error desconocido'));
+        }
+
+    } catch (error) {
+        console.error('❌ Error al enviar correo:', error);
+        this.mostrarEstadoEnvio('error', '❌ Error de conexión: ' + error.message);
+    } finally {
+        if (btnEnviar) btnEnviar.disabled = false;
+        if (spinner) spinner.classList.add('d-none');
+    }
+}
 
     mostrarEstadoEnvio(tipo, mensaje) {
         const estadoDiv = document.getElementById('estadoEnvio');
+        if (!estadoDiv) return;
+        
         estadoDiv.className = `alert ${tipo === 'success' ? 'alert-success' : 'alert-danger'}`;
         estadoDiv.textContent = mensaje;
         estadoDiv.classList.remove('d-none');
@@ -580,7 +669,7 @@ class SistemaGestionTecnica {
     mostrarMensajeExito(mensaje) {
         const alertHTML = `
             <div class="alert alert-success alert-dismissible fade show position-fixed top-0 start-50 translate-middle-x mt-3" 
-                 role="alert" style="z-index: 9999;">
+                role="alert" style="z-index: 9999;">
                 <i class="bi bi-check-circle-fill me-2"></i>${mensaje}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -588,7 +677,8 @@ class SistemaGestionTecnica {
         document.body.insertAdjacentHTML('beforeend', alertHTML);
         
         setTimeout(() => {
-            document.querySelector('.alert-success')?.remove();
+            const alert = document.querySelector('.alert-success');
+            if (alert) alert.remove();
         }, 3000);
     }
 
@@ -644,7 +734,7 @@ class SistemaGestionTecnica {
                 return;
             }
 
-            const response = await fetch("Referencia.xlsx");
+            const response = await fetch("./Referencia.xlsx");
             if (!response.ok) throw new Error("No se pudo cargar la plantilla Referencia.xlsx");
             
             const blobPlantilla = await response.blob();
@@ -804,7 +894,7 @@ class SistemaGestionTecnica {
                 return;
             }
 
-            const response = await fetch("ReferenciaEntrega.xlsx");
+            const response = await fetch("./ReferenciaEntrega.xlsx");
             if (!response.ok) throw new Error("No se pudo cargar la plantilla ReferenciaEntrega.xlsx");
             
             const blobPlantilla = await response.blob();
