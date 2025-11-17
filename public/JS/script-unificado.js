@@ -552,7 +552,7 @@ actualizarPreviewCorreo() {
     const previewMensaje = document.getElementById('previewMensaje');
     if (previewMensaje) {
         previewMensaje.innerHTML = `
-            Estimado/a,<br><br>
+            Generacion de documento,<br><br>
             Le enviamos el documento de <strong>${tipoDoc}</strong> correspondiente al servicio técnico realizado 
             para <strong>${cliente}</strong> con fecha <strong>${fechaFormateada}</strong>.<br><br>
             El archivo adjunto contiene toda la información detallada incluyendo:
@@ -564,9 +564,6 @@ actualizarPreviewCorreo() {
                 <li>Evidencias fotográficas (si aplica)</li>
             </ul>
             Por favor, descargue el documento y guárdelo para sus registros.<br><br>
-            Si tiene alguna consulta o requiere información adicional, no dude en contactarnos.<br><br>
-            Cordialmente,<br>
-            <strong>Sistema de Gestión Técnica</strong>
         `;
     }
 }
