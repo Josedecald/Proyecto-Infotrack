@@ -24,9 +24,7 @@ class SistemaGestionTecnica {
         this.archivoGenerado = null;
         this.nombreArchivoGenerado = null;
         this.tipoFormularioActual = null;
-        this.API_URL = window.location.hostname === 'localhost' 
-        ? 'http://localhost:3000/api' 
-        : '/api'; // Cambiar en producción
+        this.API_URL = '/api';
         
         this.init();
     }

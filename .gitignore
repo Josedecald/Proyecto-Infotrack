@@ -1,19 +1,16 @@
-# Node modules
-node_modules/
-server/node_modules/
-
-# Variables de entorno
+# Variables de entorno (CRÍTICO)
 .env
-server/.env
+.env.local
+.env.production
+.env.*.local
 
-# Archivos del sistema
-.DS_Store
-Thumbs.db
+# Dependencias
+node_modules/
 
 # Logs
 *.log
 npm-debug.log*
 
-# Archivos temporales
-*.tmp
-*.temp
+# Sistema
+.DS_Store
+.vscode/
