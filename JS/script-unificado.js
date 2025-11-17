@@ -494,32 +494,82 @@ class SistemaGestionTecnica {
         }
     }
 
-    mostrarModalEnvioCorreo() {
-        const modalElement = document.getElementById('modalEnviarCorreo');
-        
-        if (!modalElement) {
-            console.error('❌ Modal modalEnviarCorreo no encontrado en el HTML');
-            this.mostrarAlerta('Error', 'No se puede mostrar el formulario de envío. Recarga la página.');
-            return;
-        }
-
-        // Limpiar campos
-        const correoInput = document.getElementById('correoDestinatario');
-        const asuntoInput = document.getElementById('asuntoCorreo');
-        const mensajeInput = document.getElementById('mensajeCorreo');
-        const estadoDiv = document.getElementById('estadoEnvio');
-
-        if (correoInput) correoInput.value = '';
-        if (asuntoInput) asuntoInput.value = '';
-        if (mensajeInput) mensajeInput.value = '';
-        
-        if (estadoDiv) estadoDiv.classList.add('d-none');
-        if (correoInput) correoInput.classList.remove('is-valid', 'is-invalid');
-        
-        // Mostrar modal
-        const modalBS = new bootstrap.Modal(modalElement);
-        modalBS.show();
+mostrarModalEnvioCorreo() {
+    const modalElement = document.getElementById('modalEnviarCorreo');
+    
+    if (!modalElement) {
+        console.error('❌ Modal modalEnviarCorreo no encontrado en el HTML');
+        this.mostrarAlerta('Error', 'No se puede mostrar el formulario de envío. Recarga la página.');
+        return;
     }
+
+    // Limpiar campo de correo
+    const correoInput = document.getElementById('correoDestinatario');
+    const estadoDiv = document.getElementById('estadoEnvio');
+
+    if (correoInput) correoInput.value = '';
+    if (estadoDiv) estadoDiv.classList.add('d-none');
+    if (correoInput) correoInput.classList.remove('is-valid', 'is-invalid');
+    
+    // Actualizar vista previa según el tipo de documento
+    this.actualizarPreviewCorreo();
+    
+    // Mostrar modal
+    const modalBS = new bootstrap.Modal(modalElement);
+    modalBS.show();
+}
+
+actualizarPreviewCorreo() {
+    const esRecepcion = this.tipoFormularioActual === 'recepcion';
+    const tipoDoc = esRecepcion ? 'Recepción Técnica' : 'Entrega Técnica';
+    const icono = esRecepcion ? '📥' : '📤';
+    
+    // Obtener información del formulario
+    const cliente = esRecepcion 
+        ? document.getElementById('clienteRecepcion')?.value || '[Cliente]'
+        : document.getElementById('clienteEntrega')?.value || '[Cliente]';
+    
+    const fecha = esRecepcion
+        ? document.getElementById('fechaRecepcion')?.value || 'N/A'
+        : document.getElementById('fechaEntrega')?.value || 'N/A';
+    
+    // Formatear fecha
+    let fechaFormateada = fecha;
+    if (fecha !== 'N/A') {
+        const [year, month, day] = fecha.split('-');
+        fechaFormateada = `${day}/${month}/${year}`;
+    }
+    
+    // Actualizar asunto
+    const previewAsunto = document.getElementById('previewAsunto');
+    if (previewAsunto) {
+        previewAsunto.innerHTML = `
+            ${icono} <strong>Documento de ${tipoDoc}</strong> - ${cliente}
+        `;
+    }
+    
+    // Actualizar mensaje
+    const previewMensaje = document.getElementById('previewMensaje');
+    if (previewMensaje) {
+        previewMensaje.innerHTML = `
+            Estimado/a,<br><br>
+            Le enviamos el documento de <strong>${tipoDoc}</strong> correspondiente al servicio técnico realizado 
+            para <strong>${cliente}</strong> con fecha <strong>${fechaFormateada}</strong>.<br><br>
+            El archivo adjunto contiene toda la información detallada incluyendo:
+            <ul class="mb-2 mt-2">
+                <li>Datos del ${esRecepcion ? 'equipo recibido' : 'equipo entregado'}</li>
+                <li>Estado de componentes</li>
+                ${esRecepcion ? '<li>Descripción del problema reportado</li>' : '<li>Soluciones aplicadas</li>'}
+                <li>Firmas digitales de las partes</li>
+                <li>Evidencias fotográficas (si aplica)</li>
+            </ul>
+            Por favor, descargue el documento y guárdelo para sus registros.<br><br>
+            Si tiene alguna consulta o requiere información adicional, no dude en contactarnos.<br><br>
+            Cordialmente,<br>
+            <strong>Sistema de Gestión Técnica</strong>
+        `;
+    }
+}
 
     validarCorreoInput(input) {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -534,7 +584,7 @@ class SistemaGestionTecnica {
         }
     }
 
-    async enviarCorreo() {
+ async enviarCorreo() {
     const destinatario = document.getElementById('correoDestinatario')?.value.trim();
     const asunto = document.getElementById('asuntoCorreo')?.value.trim();
     const mensaje = document.getElementById('mensajeCorreo')?.value.trim();

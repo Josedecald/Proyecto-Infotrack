@@ -950,7 +950,7 @@
             <div class="modal-body">
                 <div class="mb-3">
                     <label for="correoDestinatario" class="form-label">
-                        Correo electrónico del destinatario *
+                        <i class="bi bi-envelope me-1"></i>Correo electrónico del destinatario *
                     </label>
                     <input 
                         type="email" 
@@ -964,29 +964,40 @@
                     </div>
                 </div>
                 
-                <div class="mb-3">
-                    <label for="asuntoCorreo" class="form-label">Asunto (opcional)</label>
-                    <input 
-                        type="text" 
-                        class="form-control" 
-                        id="asuntoCorreo" 
-                        placeholder="Documento Técnico"
-                    >
-                </div>
-                
-                <div class="mb-3">
-                    <label for="mensajeCorreo" class="form-label">Mensaje (opcional)</label>
-                    <textarea 
-                        class="form-control" 
-                        id="mensajeCorreo" 
-                        rows="3"
-                        placeholder="Mensaje adicional para el destinatario..."
-                    ></textarea>
+                <!-- Preview del correo -->
+                <div class="card bg-light border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            <i class="bi bi-eye me-1"></i>Vista previa del correo
+                        </h6>
+                        
+                        <div class="mb-2">
+                            <small class="text-muted fw-bold">Asunto:</small>
+                            <p class="mb-0 mt-1" id="previewAsunto">
+                                <i class="bi bi-file-earmark-text me-1"></i>
+                                Documento de Gestión Técnica
+                            </p>
+                        </div>
+                        
+                        <hr class="my-2">
+                        
+                        <div>
+                            <small class="text-muted fw-bold">Mensaje:</small>
+                            <p class="mb-0 mt-1 small text-secondary" id="previewMensaje" style="line-height: 1.6;">
+                                Estimado/a,<br><br>
+                                Este documento ha sido generado automaticamente. 
+                                El archivo adjunto contiene toda la información detallada del servicio.<br><br>
+                                Por favor, descargue el documento y guárdelo para sus registros.<br><br>
+                                Verifique siempre la información generada en el documento.<br><br>
+                                <strong>Sistema de Gestión Técnica</strong>
+                            </p>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="alert alert-info d-flex align-items-center" role="alert">
-                    <i class="bi bi-info-circle-fill me-2"></i>
-                    <small>El documento se generará y enviará automáticamente</small>
+                    <i class="bi bi-info-circle-fill me-2 flex-shrink-0"></i>
+                    <small>El documento se generará y enviará automáticamente con el asunto y mensaje mostrado arriba.</small>
                 </div>
 
                 <div id="estadoEnvio" class="alert d-none" role="alert"></div>
