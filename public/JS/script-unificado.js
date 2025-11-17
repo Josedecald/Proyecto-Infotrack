@@ -544,7 +544,7 @@ actualizarPreviewCorreo() {
     const previewAsunto = document.getElementById('previewAsunto');
     if (previewAsunto) {
         previewAsunto.innerHTML = `
-            ${icono} <strong>Documento de ${tipoDoc}</strong> - ${cliente}
+            ${icono} <strong>Documento de ${tipoDoc}</strong> - ${cliente} - ${fecha}
         `;
     }
     

@@ -78,7 +78,7 @@ function generarEmailHTML(mensaje, nombreArchivo, tipoDocumento) {
             line-height: 1.6;
         }
         .container {
-            max-width: 900px;
+            max-width: 700px;
             margin: 0 auto;
             background-color: #ffffff;
             border-radius: 12px;
