@@ -19,7 +19,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
 // Servir archivos estáticos
-app.use(express.static(path.join(__dirname, './public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 // Multer configuration
 const storage = multer.memoryStorage();
@@ -321,17 +321,14 @@ function generarEmailHTML(mensaje, nombreArchivo, tipoDocumento) {
 }
 
 // Ruta principal
+// Cambiar esta línea:
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Health check
-app.get('/api/health', (req, res) => {
-  res.json({ 
-    status: 'ok', 
-    timestamp: new Date().toISOString(),
-    env: process.env.NODE_ENV || 'development'
-  });
+// Por esta (si está en HTML/index.html):
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'HTML', 'index.html'));
 });
 
 // Endpoint para enviar correo
