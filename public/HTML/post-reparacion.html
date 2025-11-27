@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Post Reparación - Formulario</title>
+
+  <!-- Bootstrap y icons (mismas que en reparacion.html) -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+  <link rel="stylesheet" href="../CSS/styles2.css">
+</head>
+<body>
+  
+<nav class="navbar bg-primary fixed-top" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-light" href="#"><i class="bi bi-arrow-left-right me-2"></i>Sistema de recepcion y entrega tecnica</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon "></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="bi bi-three-dots-vertical me-2"></i>Menú</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item mb-2">
+            <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Inicio</a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link" href="/public/HTML/seleccionR.html"><i class="bi bi-wrench-adjustable-circle me-2"></i>Reparación</a>
+          </li>
+          <li class="nav-item dropdown mb-2">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-arrow-left-right me-2"></i>
+              Recepcion y entrega
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/public/HTML/index.html">Hand Held</a></li>
+              <li><a class="dropdown-item" href="#">Impresora Movil</a></li>
+              <li><a class="dropdown-item" href="#">Impresora Fija</a></li>
+              <li><a class="dropdown-item" href="#">Accesorios</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+  <div class="container col-xxl-10 mt-4 mb-5">
+    <div class="card bg-light p-4 shadow">
+      <h2 class="text-center mb-4 text-primary">
+        <i class="bi bi-wrench-adjustable me-2"></i>POST - Reparación Técnica
+      </h2>
+
+      <!-- Tabs: idénticas al wizard original -->
+      <ul class="nav nav-tabs justify-content-center mb-4" id="wizardTabsPost">
+        <li class="nav-item"><a class="nav-link active" data-step="1" href="#">1. Información</a></li>
+        <li class="nav-item"><a class="nav-link disabled" data-step="2" href="#">2. Procedimiento</a></li>
+        <li class="nav-item"><a class="nav-link disabled" data-step="3" href="#">3. Componentes</a></li>
+        <li class="nav-item"><a class="nav-link disabled" data-step="4" href="#">4. Firmas</a></li>
+      </ul>
+
+      <form id="formPostReparacion" class="needs-validation px-3" novalidate>
+        <!-- STEP 1 - Información General (reaprovechada) -->
+        <div class="wizard-step-post" data-step="1" style="display:block;">
+          <div class="row g-3 mb-3">
+            <div class="col-md-4">
+              <label class="form-label">Fabricante*</label>
+                <select id="pr_fabricante" class="form-select" required>
+                    <option value="">-</option>
+                    <option value="Zebra">Zebra</option>
+                    <option value="Honeywell">Honeywell</option>
+                    <option value="Unitech">Unitech</option>
+                    <option value="Blackview">Blackview</option>
+                    <option value="Bluebird">Bluebird</option>
+                    <option value="TSC">TSC</option>
+                    <option value="Urovo">Urovo</option>
+                    <option value="Sewoo">Sewoo</option>
+                    <option value="Brother">Brother</option>
+                </select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Modelo*</label>
+              <input id="pr_modelo" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Serial*</label>
+              <input id="pr_serial" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Cliente*</label>
+              <input id="pr_cliente" class="form-control" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Fecha*</label>
+              <input id="pr_fecha" type="date" class="form-control" required>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end mb-3">
+            <button type="button" class="btn btn-primary btn-lg pr-next">Siguiente <i class="bi bi-arrow-right-circle ms-1"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 2 - Procedimiento realizado (col O13 según tu instrucción) -->
+        <div class="wizard-step-post" data-step="2" style="display:none;">
+          <div class="mb-3">
+            <label class="form-label">Procedimiento realizado y reparación (O13)*</label>
+            <textarea id="pr_procedimiento" class="form-control" rows="4" required></textarea>
+            <div class="form-text">Este texto se mapeará en la celda O13 de la plantilla.</div>
+          </div>
+
+          <div class="d-flex justify-content-between mb-3">
+            <button type="button" class="btn btn-secondary btn-lg pr-prev"><i class="bi bi-arrow-left-circle me-1"></i>Atrás</button>
+            <button type="button" class="btn btn-primary btn-lg pr-next">Siguiente <i class="bi bi-arrow-right-circle ms-1"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 3 - Componentes (Q38 - Q53 mapping) -->
+        <div class="wizard-step-post" data-step="3" style="display:none;">
+          <p class="small text-muted">Marca el estado de la funcionalidad del componente</p>
+
+          <div class="row g-3">
+            <!-- Repetir para cada componente, ids pr_comp_x -->
+            <div class="col-md-3">
+              <label class="form-label">PERFIL CONEXIÓN WIFI*</label>
+              <select id="pr_comp_wifi" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">PRUEBA CONEXION BLUETOOTH*</label>
+              <select id="pr_comp_bt" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">CÓDIGO DE BARRA - ESCANER*</label>
+              <select id="pr_comp_scan" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">PULSACIONES DE TECLADO/BOTONES*</label>
+              <select id="pr_comp_keys" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">SENSIBILIDAD DE PANTALLA - TÁCTIL*</label>
+              <select id="pr_comp_touch" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">CONEXIÓN SIM Y VALIDACIÓN GPRS*</label>
+              <select id="pr_comp_sim" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">PARLANTE - ALTAVOZ*</label>
+              <select id="pr_comp_speaker" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">MICRÓFONO*</label>
+              <select id="pr_comp_mic" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">CAPTURA IMÁGENES - CÁMARA*</label>
+              <select id="pr_comp_cam" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">CALIDAD DE IMPRESIÓN*</label>
+              <select id="pr_comp_print" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">CARGA EXTERNA*</label>
+              <select id="pr_comp_charge" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">TEST CABEZAL DE IMPRESIÓN*</label>
+              <select id="pr_comp_head" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">SENSOR DE CINTA*</label>
+              <select id="pr_comp_ribbon" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">SENSOR DE PAPEL*</label>
+              <select id="pr_comp_papersensor" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3">
+              <label class="form-label">CONEXIÓN USB/SERIAL*</label>
+              <select id="pr_comp_usb" class="form-select pr-comp" required>
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+              </select>
+            </div>
+
+            <div class="col-md-3 mb-5">
+              <label class="form-label">OTROS</label>
+              <select id="pr_comp_otros" class="form-select pr-comp">
+                <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
+                </select>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mb-3">
+            <button type="button" class="btn btn-secondary btn-lg pr-prev"><i class="bi bi-arrow-left-circle me-1"></i>Atrás</button>
+            <button type="button" class="btn btn-primary btn-lg pr-next">Siguiente <i class="bi bi-arrow-right-circle ms-1"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 5 - Firmas -->
+        <div class="wizard-step-post" data-step="4" style="display:none;">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Firma de quien entrega (B63)</label>
+              <div id="previewFirmaEntrega" class="border p-2" style="min-height:120px;"></div>
+              <button type="button" class="btn btn-outline-primary mt-2" id="abrirModalFirmaEntrega">Firmar</button>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Firma de quien recibe (P63)</label>
+              <div id="previewFirmaRecibe" class="border p-2" style="min-height:120px;"></div>
+              <button type="button" class="btn btn-outline-primary mt-2" id="abrirModalFirmaRecibe">Firmar</button>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between mt-4">
+            <button type="button" class="btn btn-secondary btn-lg pr-prev"><i class="bi bi-arrow-left-circle me-1"></i>Atrás</button>
+            <button type="submit" class="btn btn-success btn-lg">Finalizar y Generar</button>
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+    <!-- Modal Firma Entrega -->
+    <div class="modal fade" id="modalFirmaEntrega" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+            <i class="bi bi-pen me-2"></i>Firma de quien Entrega
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted mb-3">Firma en el recuadro usando tu mouse, dedo o lápiz táctil</p>
+            <div class="border rounded p-2 bg-white" style="overflow:hidden;">
+            <canvas id="firmaCanvasEntrega" style="border:1px solid #ddd; border-radius:4px;"></canvas>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="limpiarFirmaEntrega">
+            <i class="bi bi-eraser me-1"></i>Limpiar
+            </button>
+            <button type="button" class="btn btn-primary" id="guardarFirmaEntrega">
+            <i class="bi bi-check-lg me-1"></i>Guardar Firma
+            </button>
+        </div>
+        </div>
+    </div>
+    </div>
+
+    <!-- Modal Firma Recibe -->
+    <div class="modal fade" id="modalFirmaRecibe" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+        <div class="modal-header bg-primary text-white">
+            <h5 class="modal-title">
+            <i class="bi bi-pen me-2"></i>Firma de quien Recibe
+            </h5>
+            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+            <p class="text-muted mb-3">Firma en el recuadro usando tu mouse, dedo o lápiz táctil</p>
+            <div class="border rounded p-2 bg-white" style="overflow:hidden;">
+            <canvas id="firmaCanvasRecibe" style="border:1px solid #ddd; border-radius:4px;"></canvas>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-secondary" id="limpiarFirmaRecibe">
+            <i class="bi bi-eraser me-1"></i>Limpiar
+            </button>
+            <button type="button" class="btn btn-primary" id="guardarFirmaRecibe">
+            <i class="bi bi-check-lg me-1"></i>Guardar Firma
+            </button>
+        </div>
+        </div>
+    </div>
+    </div>
+    <div class="modal fade" id="modalAccionDocumento" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-file-earmark-check me-2"></i>¿Qué deseas hacer?
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-center py-4">
+                    <p class="mb-4">El documento ha sido generado exitosamente.</p>
+                    <div class="d-grid gap-3">
+                        <button type="button" class="btn btn-lg btn-primary" id="btnDescargarDirectoPost">
+                            <i class="bi bi-download me-2"></i>Descargar al Computador
+                        </button>
+                        <button type="button" class="btn btn-lg btn-outline-primary" id="btnEnviarCorreoPost">
+                            <i class="bi bi-envelope-fill me-2"></i>Enviar por Correo Electrónico
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalEnviarCorreo" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title">
+                        <i class="bi bi-envelope-fill me-2"></i>Enviar Documento por Correo
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="correoDestinatario" class="form-label">
+                            <i class="bi bi-envelope me-1"></i>Correo electrónico del destinatario *
+                        </label>
+                        <input type="email" class="form-control" id="correoDestinatario" placeholder="ejemplo@correo.com" required>
+                    </div>
+                    
+                    <div class="alert alert-info d-flex align-items-center" role="alert">
+                        <i class="bi bi-info-circle-fill me-2 flex-shrink-0"></i>
+                        <small>El documento Post-Reparación se adjuntará automáticamente.</small>
+                    </div>
+
+                    <div id="estadoEnvio" class="alert d-none" role="alert"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="btnConfirmarEnvio">
+                        <span class="spinner-border spinner-border-sm me-2 d-none" id="spinnerEnvio"></span>
+                        Enviar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <footer class="mt-5 text-center text-muted">© 2025 Sistema de Reparación Técnica</footer>
+
+  <!-- libs (mismas que en reparacion.html) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
+    <!-- Scripts necesarios -->
+  <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.3.0/exceljs.min.js"></script>
+
+  <!-- Reusar script-reparacion (clase SistemaReparacion) -->
+  <script src="/public/JS/script-reparacion.js"></script>
+
+  <!-- Nuevo script para esta página (usa la clase existente y la extiende) -->
+  <script src="/public/JS/post-reparacion.js"></script>
+</body>
+</html>

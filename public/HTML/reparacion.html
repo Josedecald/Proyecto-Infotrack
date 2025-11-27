@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Reparación Técnica</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="../CSS/styles2.css">
+</head>
+
+<body>
+<nav class="navbar bg-primary fixed-top" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-light" href="#"><i class="bi bi-arrow-left-right me-2"></i>Sistema de recepcion y entrega tecnica</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon "></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="bi bi-three-dots-vertical me-2"></i>Menú</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item mb-2">
+            <a class="nav-link active" aria-current="page" href="#"><i class="bi bi-house me-2"></i>Inicio</a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link" href="/public/HTML/seleccionR.html"><i class="bi bi-wrench-adjustable-circle me-2"></i>Reparación</a>
+          </li>
+          <li class="nav-item dropdown mb-2">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-arrow-left-right me-2"></i>
+              Recepcion y entrega
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="/public/HTML/index.html">Hand Held</a></li>
+              <li><a class="dropdown-item" href="#">Impresora Movil</a></li>
+              <li><a class="dropdown-item" href="#">Impresora Fija</a></li>
+              <li><a class="dropdown-item" href="#">Accesorios</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+    <!-- CONTENIDO -->
+    <div class="container col-xxl-10 mt-4 mb-5">
+        <div class="card bg-light p-4 shadow">
+
+            <h2 class="text-center mb-4 text-primary">
+                <i class="bi bi-wrench-adjustable me-2"></i>Formulario de Reparación Técnica
+            </h2>
+
+            <!-- BARRA DE PESTAÑAS DEL WIZARD -->
+            <ul class="nav nav-tabs justify-content-center mb-4" id="wizardTabs">
+                <li class="nav-item">
+                    <a class="nav-link active" data-step="1" href="#">1. Información General</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" data-step="2" href="#">2. Diagnóstico</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" data-step="3" href="#">3. Componentes</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" data-step="4" href="#">4. Observaciones</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" data-step="5" href="#">5. Falla</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" data-step="6" href="#">6. Fotos</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" data-step="7" href="#">7. Repuestos</a>
+                </li>
+            </ul>
+
+            <form class="row px-3 needs-validation" id="formularioReparacion" novalidate>
+                <p><small>Los campos marcados con * son obligatorios.</small></p>
+
+                <!-- ========================= -->
+                <!-- PASO 1 - INFORMACIÓN GENERAL (sin acordeón) -->
+                <!-- ========================= -->
+                <div class="wizard-step" data-step="1" style="display: block;">
+                <!-- CONTENIDO DEL PASO 1 -->
+                <section class="mb-4">
+                    <div class="card mb-3">
+                        <div class="card-header">
+                            <i class="bi bi-info-circle me-2"></i>Información General*
+                        </div>
+                        <div class="card-body">
+
+                                    <div class="row g-3">
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="fabricante" class="form-label">Fabricante*</label>
+                                            <select id="fabricante" class="form-select" required>
+                                                <option value="">-</option>
+                                                <option value="Zebra">Zebra</option>
+                                                <option value="Honeywell">Honeywell</option>
+                                                <option value="Unitech">Unitech</option>
+                                                <option value="Blackview">Blackview</option>
+                                                <option value="Bluebird">Bluebird</option>
+                                                <option value="TSC">TSC</option>
+                                                <option value="Urovo">Urovo</option>
+                                                <option value="Sewoo">Sewoo</option>
+                                                <option value="Brother">Brother</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="modelo" class="form-label">Modelo*</label>
+                                            <input type="text" id="modelo" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="serial" class="form-label">Serial*</label>
+                                            <input type="text" id="serial" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="contrato" class="form-label">Contrato*</label>
+                                            <select id="contrato" class="form-select" required>
+                                                <option value="">-</option>
+                                                <option value="GARANTIA">Garantia</option>
+                                                <option value="DEMANDA">Demanda</option>
+                                                <option value="CONVENIO">Convenio</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="cliente" class="form-label">Cliente*</label>
+                                            <input type="text" id="cliente" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="direccion" class="form-label">Dirección</label>
+                                            <input type="text" id="direccion" class="form-control">
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="telefono" class="form-label">Teléfono</label>
+                                            <input type="tel" id="telefono" class="form-control">
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="ciudad" class="form-label">Ciudad*</label>
+                                            <select class="form-select" id="ciudad" required>
+                                                <option value="">Seleccione...</option>
+                                                <option value="Barranquilla">Barranquilla</option>
+                                                <option value="Bogotá">Bogotá</option>
+                                                <option value="Cali">Cali</option>
+                                                <option value="Cartagena">Cartagena</option>
+                                                <option value="Medellín">Medellín</option>
+                                                <option value="Bucaramanga">Bucaramanga</option>
+                                                <option value="Pereira">Pereira</option>
+                                                <option value="Cúcuta">Cúcuta</option>
+                                                <option value="Santa Marta">Santa Marta</option>
+                                                <option value="Sincelejo">Sincelejo</option>
+                                                <option value="Villavicencio">Villavicencio</option>
+                                                <option value="Yopal">Yopal</option>
+                                            </select>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="fecha" class="form-label">Fecha*</label>
+                                            <input type="date" id="fecha" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="ingeniero" class="form-label">Ingeniero*</label>
+                                            <input type="text" id="ingeniero" class="form-control" required>
+                                        </div>
+
+                                        <div class="col-xxl-4 col-sm-4">
+                                            <label for="ticket" class="form-label">Ticket*</label>
+                                            <input type="text" id="ticket" class="form-control" required>
+                                        </div>
+                                    </div>
+
+                        </div>
+                    </div>
+                </section>
+
+                <!-- BOTÓN SIGUIENTE -->
+                <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-primary btn-lg wizard-next">
+                        Siguiente <i class="bi bi-arrow-right-circle ms-1"></i>
+                    </button>
+                </div>
+
+                </div> <!-- cierre wizard-step paso 1 -->
+                <!-- ========================= -->
+<!-- PASO 2 - REVISIÓN INICIAL / DIAGNÓSTICO (sin acordeón) -->
+<!-- ========================= -->
+<div class="wizard-step" data-step="2" style="display: none;">
+
+    <section class="mb-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="bi bi-clipboard-check me-2"></i>Revisión Inicial/Diagnóstico*
+            </div>
+            <div class="card-body">
+                <textarea class="form-control" id="revisionInicial" rows="3" required></textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTONES ATRÁS / SIGUIENTE -->
+    <div class="d-flex justify-content-between mb-3">
+        <button type="button" class="btn btn-secondary btn-lg wizard-prev">
+            <i class="bi bi-arrow-left-circle me-1"></i> Atrás
+        </button>
+
+        <button type="button" class="btn btn-primary btn-lg wizard-next">
+            Siguiente <i class="bi bi-arrow-right-circle ms-1"></i>
+        </button>
+    </div>
+
+</div> <!-- cierre wizard-step paso 2 -->
+<!-- ========================= -->
+<!-- PASO 3 - ESTADO DE COMPONENTES (sin acordeón) -->
+<!-- ========================= -->
+<div class="wizard-step" data-step="3" style="display: none;">
+
+<section class="mb-4">
+    <div class="card mb-3">
+        <div class="card-header">
+            <i class="bi bi-gear me-2"></i>Estado de Componentes*
+        </div>
+        <div class="card-body">
+                <p class="text-muted small mb-3">Marque el estado de cada componente</p>
+
+                <div id="componentesContainer" class="row g-3">
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_stylus" class="form-label mb-1">STYLUS</label>
+                        <select class="form-select" name="componente_stylus" id="componente_stylus" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_correa" class="form-label mb-1">CORREA DE MANO</label>
+                        <select class="form-select" name="componente_correa" id="componente_correa" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_screen" class="form-label mb-1">SCREEN</label>
+                        <select class="form-select" name="componente_screen" id="componente_screen" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_escaner" class="form-label mb-1">ESCANER</label>
+                        <select class="form-select" name="componente_escaner" id="componente_escaner" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_pantalla" class="form-label mb-1">PANTALLA</label>
+                        <select class="form-select" name="componente_pantalla" id="componente_pantalla" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_teclado" class="form-label mb-1">TECLADO PRINCIPAL</label>
+                        <select class="form-select" name="componente_teclado" id="componente_teclado" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_teclasLat" class="form-label mb-1">TECLAS LATERALES</label>
+                        <select class="form-select" name="componente_teclasLat" id="componente_teclasLat" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_tapaBat" class="form-label mb-1">TAPA DE BATERIA</label>
+                        <select class="form-select" name="componente_tapaBat" id="componente_tapaBat" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_microsd" class="form-label mb-1">TARJETA MICRO SD</label>
+                        <select class="form-select" name="componente_microsd" id="componente_microsd" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_simcard" class="form-label mb-1">SIM CARD</label>
+                        <select class="form-select" name="componente_simcard" id="componente_simcard" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_carcasaSup" class="form-label mb-1">CARCASA SUPERIOR</label>
+                        <select class="form-select" name="componente_carcasaSup" id="componente_carcasaSup" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_carcasaInf" class="form-label mb-1">CARCASA INFERIOR</label>
+                        <select class="form-select" name="componente_carcasaInf" id="componente_carcasaInf" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_bateria" class="form-label mb-1">BATERIA</label>
+                        <select class="form-select" name="componente_bateria" id="componente_bateria" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_tapaPapel" class="form-label mb-1">TAPA DE PAPEL</label>
+                        <select class="form-select" name="componente_tapaPapel" id="componente_tapaPapel" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_rodillo" class="form-label mb-1">RODILLO</label>
+                        <select class="form-select" name="componente_rodillo" id="componente_rodillo" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_cabezal" class="form-label mb-1">CABEZAL DE IMPRESIÓN</label>
+                        <select class="form-select" name="componente_cabezal" id="componente_cabezal" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_sensorPapel" class="form-label mb-1">SENSOR DE PAPEL</label>
+                        <select class="form-select" name="componente_sensorPapel" id="componente_sensorPapel" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_guias" class="form-label mb-1">GUIAS DE ETIQUETAS</label>
+                        <select class="form-select" name="componente_guias" id="componente_guias" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_cables" class="form-label mb-1">CABLES</label>
+                        <select class="form-select" name="componente_cables" id="componente_cables" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-3 col-sm-6">
+                        <label for="componente_baseEscaner" class="form-label mb-1">BASE DE ESCANER</label>
+                        <select class="form-select" name="componente_baseEscaner" id="componente_baseEscaner" required>
+                            <option value="">-</option>
+                            <option value="bueno">Bueno</option>
+                            <option value="malo">Malo</option>
+                            <option value="notrae">No Trae</option>
+                        </select>
+                    </div>
+
+                </div> <!-- Fin grid -->
+        </div>
+    </div>
+</section>
+
+<!-- BOTONES -->
+<div class="d-flex justify-content-between mb-3">
+    <button type="button" class="btn btn-secondary btn-lg wizard-prev">
+        <i class="bi bi-arrow-left-circle me-1"></i> Atrás
+    </button>
+
+    <button type="button" class="btn btn-primary btn-lg wizard-next">
+        Siguiente <i class="bi bi-arrow-right-circle ms-1"></i>
+    </button>
+</div>
+
+</div> <!-- cierre wizard-step paso 3 -->
+<!-- ========================= -->
+<!-- PASO 4 - OBSERVACIONES (sin acordeón) -->
+<!-- ========================= -->
+<div class="wizard-step" data-step="4" style="display: none;">
+
+    <section class="mb-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="bi bi-journal-text me-2"></i>Observaciones adicionales
+            </div>
+            <div class="card-body">
+                <textarea class="form-control" id="observaciones" rows="3" required></textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTONES -->
+    <div class="d-flex justify-content-between mb-3">
+        <button type="button" class="btn btn-secondary btn-lg wizard-prev">
+            <i class="bi bi-arrow-left-circle me-1"></i> Atrás
+        </button>
+
+        <button type="button" class="btn btn-primary btn-lg wizard-next">
+            Siguiente <i class="bi bi-arrow-right-circle ms-1"></i>
+        </button>
+    </div>
+
+</div> <!-- cierre paso 4 -->
+
+
+<!-- ========================= -->
+<!-- PASO 5 - FALLA REPORTADA (sin acordeón) -->
+<!-- ========================= -->
+<div class="wizard-step" data-step="5" style="display: none;">
+
+    <section class="mb-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="bi bi-exclamation-triangle me-2"></i>Falla Reportada*
+            </div>
+            <div class="card-body">
+                <textarea class="form-control" id="falla" rows="3" required></textarea>
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTONES -->
+    <div class="d-flex justify-content-between mb-3">
+        <button type="button" class="btn btn-secondary btn-lg wizard-prev">
+            <i class="bi bi-arrow-left-circle me-1"></i> Atrás
+        </button>
+
+        <button type="button" class="btn btn-primary btn-lg wizard-next">
+            Siguiente <i class="bi bi-arrow-right-circle ms-1"></i>
+        </button>
+    </div>
+
+</div> <!-- cierre paso 5 -->
+
+
+<!-- ========================= -->
+<!-- PASO 6 - FOTOGRAFÍAS (sin acordeón) -->
+<!-- ========================= -->
+<div class="wizard-step" data-step="6" style="display: none;">
+
+    <section class="mb-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="bi bi-camera me-2"></i>Fotografías del equipo
+            </div>
+            <div class="card-body">
+
+                <div class="mb-3">
+                    <label class="form-label fw-bold">Subir Fotos</label>
+                    <input type="file" class="form-control" id="fotos" accept="image/*" multiple required>
+                </div>
+
+                <div id="previewFotos" class="row g-2"></div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTONES -->
+    <div class="d-flex justify-content-between mb-3">
+        <button type="button" class="btn btn-secondary btn-lg wizard-prev">
+            <i class="bi bi-arrow-left-circle me-1"></i> Atrás
+        </button>
+
+        <button type="button" class="btn btn-primary btn-lg wizard-next">
+            Siguiente <i class="bi bi-arrow-right-circle ms-1"></i>
+        </button>
+    </div>
+
+</div> <!-- cierre paso 6 -->
+
+<!-- ========================= -->
+<!-- PASO 7 - REPUESTOS (sin acordeón) -->
+<!-- ========================= -->
+<div class="wizard-step" data-step="7" style="display: none;">
+
+    <section class="mb-4">
+        <div class="card mb-3">
+            <div class="card-header">
+                <i class="bi bi-box-seam me-2"></i>Repuestos utilizados
+            </div>
+            <div class="card-body">
+
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <button type="button" class="btn btn-outline-primary btn-sm" id="agregarRepuesto">
+                        <i class="bi bi-plus-lg me-1"></i>Agregar Repuesto
+                    </button>
+                </div>
+
+                <div id="repuestosContainer">
+                    <!-- Los repuestos se agregarán dinámicamente aquí por script-reparacion.js -->
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- BOTONES -->
+    <div class="d-flex justify-content-between mb-3">
+        <button type="button" class="btn btn-secondary btn-lg wizard-prev">
+            <i class="bi bi-arrow-left-circle me-1"></i> Atrás
+        </button>
+
+        <button type="submit" class="btn btn-success btn-lg">
+            Finalizar <i class="bi bi-check-circle ms-1"></i>
+        </button>
+    </div>
+
+</div> <!-- cierre paso 7 -->
+
+<!-- MODAL ALERTA GENERAL -->
+<div class="modal fade" id="modalAlerta" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header bg-danger text-white text-center">
+                <h5 class="modal-title w-100" id="modalAlertaTitle">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Atención
+                </h5>
+            </div>
+            <div class="modal-body text-center" id="modalAlertaBody">
+                Los campos con * son obligatorios.
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-check2-circle me-1"></i>Ok
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL CONFIRMACIÓN ELIMINAR REPUESTO -->
+<div class="modal fade" id="modalConfirmarEliminar" data-bs-backdrop="static" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content rounded-4 shadow">
+            <div class="modal-header bg-warning text-dark text-center">
+                <h5 class="modal-title w-100">
+                    <i class="bi bi-exclamation-triangle me-2"></i>Confirmar Eliminación
+                </h5>
+            </div>
+            <div class="modal-body text-center" id="modalConfirmarEliminarBody">
+                ¿Estás seguro de que deseas eliminar este repuesto?
+            </div>
+            <div class="modal-footer justify-content-center">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-danger" id="btnConfirmarEliminar">
+                    <i class="bi bi-trash3 me-1"></i>Eliminar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ACCIÓN DOCUMENTO -->
+<div class="modal fade" id="modalAccionDocumento" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-file-earmark-check me-2"></i>¿Qué deseas hacer?
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body text-center py-4">
+                <p class="mb-4">Elige una opción para tu documento:</p>
+                <div class="d-grid gap-3">
+                    <button type="button" class="btn btn-lg btn-primary" id="btnDescargarDirecto">
+                        <i class="bi bi-download me-2"></i>Descargar al Computador
+                    </button>
+                    <button type="button" class="btn btn-lg btn-outline-primary" id="btnEnviarCorreo">
+                        <i class="bi bi-envelope-fill me-2"></i>Enviar por Correo Electrónico
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- MODAL ENVIAR CORREO -->
+<div class="modal fade" id="modalEnviarCorreo" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 shadow-lg">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title">
+                    <i class="bi bi-envelope-fill me-2"></i>Enviar Documento por Correo
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="correoDestinatario" class="form-label">
+                        <i class="bi bi-envelope me-1"></i>Correo electrónico del destinatario *
+                    </label>
+                    <input 
+                        type="email" 
+                        class="form-control" 
+                        id="correoDestinatario" 
+                        placeholder="ejemplo@correo.com"
+                        required
+                    >
+                    <div class="invalid-feedback">
+                        Por favor ingresa un correo válido
+                    </div>
+                </div>
+                
+                <!-- Preview del correo -->
+                <div class="card bg-light border-0 mb-3">
+                    <div class="card-body">
+                        <h6 class="card-subtitle mb-3 text-muted">
+                            <i class="bi bi-eye me-1"></i>Vista previa del correo
+                        </h6>
+                        
+                        <div class="mb-2">
+                            <small class="text-muted fw-bold">Asunto:</small>
+                            <p class="mb-0 mt-1" id="previewAsunto">
+                                🔧 <strong>Reporte de Reparación Técnica</strong>
+                            </p>
+                        </div>
+                        
+                        <hr class="my-2">
+                        
+                        <div>
+                            <small class="text-muted fw-bold">Mensaje:</small>
+                            <p class="mb-0 mt-1 small text-secondary" id="previewMensaje" style="line-height: 1.6;">
+                                Estimado/a,<br><br>
+                                Le enviamos el <strong>Reporte de Reparación Técnica</strong>.<br><br>
+                                El archivo adjunto contiene toda la información detallada incluyendo:
+                                <ul class="mb-2 mt-2">
+                                    <li>Diagnóstico inicial</li>
+                                    <li>Estado de componentes</li>
+                                    <li>Repuestos utilizados</li>
+                                    <li>Evidencia fotográfica</li>
+                                </ul>
+                                Por favor, descargue el documento y guárdelo para sus registros.<br><br>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="alert alert-info d-flex align-items-center" role="alert">
+                    <i class="bi bi-info-circle-fill me-2 flex-shrink-0"></i>
+                    <small>El documento se generará y enviará automáticamente.</small>
+                </div>
+
+                <div id="estadoEnvio" class="alert d-none" role="alert"></div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-circle me-1"></i>Cancelar
+                </button>
+                <button type="button" class="btn btn-primary" id="btnConfirmarEnvio">
+                    <span class="spinner-border spinner-border-sm me-2 d-none" id="spinnerEnvio"></span>
+                    <i class="bi bi-send-fill me-1"></i>Enviar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+    
+
+    <footer class="mt-5 text-center text-muted">© 2025 Sistema de Reparación Técnica</footer>
+
+    <!-- LIBRERÍAS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
+    <script src="/public/JS/script-reparacion.js"></script>
+    <script src="/public/JS/steps.js"></script>
+</body>
+</html>
