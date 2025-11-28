@@ -3,7 +3,6 @@ const cors = require('cors');
 const multer = require('multer');
 const path = require('path');
 const { MailtrapClient } = require("mailtrap");
-const XLSX = require('xlsx'); // Agregar al inicio si no está
 require('dotenv').config();
 
 const app = express();
@@ -387,100 +386,6 @@ app.post('/api/enviar-correo', upload.single('archivo'), async (req, res) => {
     res.status(500).json({
       success: false,
       message: "Error al enviar el correo: " + error.message
-    });
-  }
-});
-
-// Endpoint para procesar Excel
-app.post('/api/procesar-excel', upload.single('file'), async (req, res) => {
-  try {
-    if (!req.file) {
-      return res.status(400).json({
-        success: false,
-        message: 'No se recibió archivo'
-      });
-    }
-
-    console.log(`📄 Procesando archivo: ${req.file.originalname} (${(req.file.size / 1024 / 1024).toFixed(2)} MB)`);
-
-    // Leer el archivo Excel desde el buffer
-    const workbook = XLSX.read(req.file.buffer, { type: 'buffer' });
-    
-    // Obtener la primera hoja
-    const sheetName = workbook.SheetNames[0];
-    const worksheet = workbook.Sheets[sheetName];
-    
-    // Convertir a JSON
-    const data = XLSX.utils.sheet_to_json(worksheet);
-
-    console.log(`✅ Archivo procesado. Filas: ${data.length}`);
-
-    // Generar ID único
-    const id = Date.now().toString(36) + Math.random().toString(36).substr(2);
-
-    // Guardar en sesión temporal (en producción usar Redis o BD)
-    // Por ahora guardamos en memoria
-    if (!global.excelCache) {
-      global.excelCache = {};
-    }
-    global.excelCache[id] = {
-      data,
-      fileName: req.file.originalname,
-      uploadedAt: new Date(),
-      expiresAt: new Date(Date.now() + 30 * 60 * 1000) // 30 minutos
-    };
-
-    res.json({
-      success: true,
-      id,
-      data,
-      rowCount: data.length,
-      fileName: req.file.originalname
-    });
-
-  } catch (error) {
-    console.error('❌ Error al procesar Excel:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error al procesar el archivo Excel: ' + error.message
-    });
-  }
-});
-
-// Endpoint para obtener datos del Excel (desde post-reparacion.html)
-app.get('/api/excel-data/:id', (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    if (!global.excelCache || !global.excelCache[id]) {
-      return res.status(404).json({
-        success: false,
-        message: 'Datos no encontrados o expirados'
-      });
-    }
-
-    const cache = global.excelCache[id];
-
-    // Verificar si expiró
-    if (new Date() > cache.expiresAt) {
-      delete global.excelCache[id];
-      return res.status(404).json({
-        success: false,
-        message: 'Los datos han expirado'
-      });
-    }
-
-    res.json({
-      success: true,
-      data: cache.data,
-      fileName: cache.fileName
-    });
-
-  } catch (error) {
-    console.error('❌ Error al obtener datos:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Error al obtener datos'
     });
   }
 });
