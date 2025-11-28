@@ -19,49 +19,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            // Mostrar indicador de carga
-            const btnLabel = document.getElementById('btnSubirArchivo');
-            if (btnLabel) {
-                const originalHTML = btnLabel.innerHTML;
-                btnLabel.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
-                btnLabel.style.pointerEvents = 'none';
-            }
-            
             try {
-                // Crear FormData con el archivo
-                const formData = new FormData();
-                formData.append('file', file);
+                // Convertir archivo a base64 para pasarlo por URL
+                const base64 = await fileToBase64(file);
                 
-                // Enviar al servidor
-                const response = await fetch('/api/procesar-excel', {
-                    method: 'POST',
-                    body: formData
-                });
+                // Guardar en sessionStorage para pasarlo a la siguiente página
+                sessionStorage.setItem('excelFileData', base64);
+                sessionStorage.setItem('excelFileName', file.name);
                 
-                if (!response.ok) {
-                    const errorData = await response.json();
-                    throw new Error(errorData.message || `Error del servidor: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                // Guardar solo el ID en sessionStorage (es pequeño)
-                sessionStorage.setItem('excelProcessedId', result.id);
-                sessionStorage.setItem('excelData', JSON.stringify(result.data));
-                
-                // Redirigir
+                // Redirigir a post-reparacion.html
                 window.location.href = './post-reparacion.html';
                 
             } catch (error) {
                 console.error('Error procesando archivo:', error);
-                alert('Error al procesar el archivo: ' + error.message);
+                alert('Error al procesar el archivo. Por favor intenta de nuevo.');
                 fileInput.value = '';
-                
-                if (btnLabel) {
-                    btnLabel.innerHTML = originalHTML;
-                    btnLabel.style.pointerEvents = 'auto';
-                }
             }
+        });
+    }
+    
+    // Función auxiliar para convertir archivo a base64
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
         });
     }
 });
@@ -94,24 +77,12 @@ document.addEventListener('DOMContentLoaded', () => {
             btnLabel.style.pointerEvents = 'none';
             
             try {
-                // Crear FormData con el archivo
-                const formData = new FormData();
-                formData.append('file', file);
+                // Convertir a base64
+                const base64 = await fileToBase64(file);
                 
-                // Enviar al servidor
-                const response = await fetch('/api/procesar-excel', {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                if (!response.ok) {
-                    throw new Error(`Error del servidor: ${response.status}`);
-                }
-                
-                const result = await response.json();
-                
-                // Guardar solo el ID en sessionStorage (es pequeño)
-                sessionStorage.setItem('excelProcessedId', result.id);
+                // Guardar en sessionStorage
+                sessionStorage.setItem('excelFileData', base64);
+                sessionStorage.setItem('excelFileName', file.name);
                 
                 // Redirigir
                 window.location.href = '../HTML/post-reparacion.html';
@@ -123,6 +94,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnLabel.innerHTML = originalHTML;
                 btnLabel.style.pointerEvents = 'auto';
             }
+        });
+    }
+    
+    function fileToBase64(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onload = () => resolve(reader.result);
+            reader.onerror = reject;
+            reader.readAsDataURL(file);
         });
     }
 });
