@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 sessionStorage.setItem('excelFileName', file.name);
                 
                 // Redirigir a post-reparacion.html
-                window.location.href = '/public/HTML/post-reparacion.html';
+                window.location.href = './post-reparacion.html';
                 
             } catch (error) {
                 console.error('Error procesando archivo:', error);
