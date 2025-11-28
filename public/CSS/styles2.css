@@ -74,3 +74,27 @@ body { padding-top: 70px; }
 
 /* estilo para pestañas con error */
 #wizardTabs .nav-link.text-danger { border-bottom: 3px solid #dc3545 !important; }
+
+/* Editor de imágenes */
+#canvasEditor {
+    border: 2px solid #dee2e6;
+    background: white;
+}
+
+#canvasContainer {
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 4px;
+}
+
+#listaImagenesEditor .card {
+    transition: all 0.2s;
+}
+
+#listaImagenesEditor .card:hover {
+    transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+}
+
+#listaImagenesEditor .card.border-primary {
+    border-width: 3px !important;
+}
