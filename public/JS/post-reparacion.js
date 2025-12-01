@@ -12,7 +12,14 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Verificar si hay un Excel cargado desde seleccionR
   const excelData = sessionStorage.getItem('excelFileData');
-  if (excelData) await cargarDatosDesdeExcel(excelData, sistema);
+  console.log('🔍 Datos en sessionStorage:', excelData ? 'SÍ encontrados' : 'NO encontrados');
+  
+  if (excelData) {
+    console.log('📥 Cargando datos desde Excel...');
+    await cargarDatosDesdeExcel(excelData, sistema);
+  } else {
+    console.warn('⚠️ No hay datos de Excel en sessionStorage');
+  }
 
   // ============================================
   // WIZARD

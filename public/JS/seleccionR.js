@@ -1,54 +1,4 @@
-// seleccionR.js
-document.addEventListener('DOMContentLoaded', () => {
-    const fileInput = document.querySelector('input[type="file"]');
-    
-    if (fileInput) {
-        fileInput.addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            
-            if (!file) return;
-            
-            // Validar que sea un archivo Excel
-            const validExtensions = ['.xlsx', '.xls'];
-            const fileName = file.name.toLowerCase();
-            const isValidExcel = validExtensions.some(ext => fileName.endsWith(ext));
-            
-            if (!isValidExcel) {
-                alert('Por favor selecciona un archivo Excel válido (.xlsx o .xls)');
-                fileInput.value = '';
-                return;
-            }
-            
-            try {
-                // Convertir archivo a base64 para pasarlo por URL
-                const base64 = await fileToBase64(file);
-                
-                // Guardar en sessionStorage para pasarlo a la siguiente página
-                sessionStorage.setItem('excelFileData', base64);
-                sessionStorage.setItem('excelFileName', file.name);
-                
-                // Redirigir a post-reparacion.html
-                window.location.href = './post-reparacion.html';
-                
-            } catch (error) {
-                console.error('Error procesando archivo:', error);
-                alert('Error al procesar el archivo. Por favor intenta de nuevo.');
-                fileInput.value = '';
-            }
-        });
-    }
-    
-    // Función auxiliar para convertir archivo a base64
-    function fileToBase64(file) {
-        return new Promise((resolve, reject) => {
-            const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
-            reader.readAsDataURL(file);
-        });
-    }
-});
-
+// seleccionR.js - Manejo unificado de carga de archivos Excel
 
 document.addEventListener('DOMContentLoaded', () => {
     const fileInput = document.getElementById('fileInputExcel');
@@ -80,15 +30,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Convertir a base64
                 const base64 = await fileToBase64(file);
                 
+                console.log('✅ Archivo convertido a base64, tamaño:', base64.length);
+                
                 // Guardar en sessionStorage
                 sessionStorage.setItem('excelFileData', base64);
                 sessionStorage.setItem('excelFileName', file.name);
+                
+                console.log('✅ Datos guardados en sessionStorage');
                 
                 // Redirigir
                 window.location.href = '../HTML/post-reparacion.html';
                 
             } catch (error) {
-                console.error('Error procesando archivo:', error);
+                console.error('❌ Error procesando archivo:', error);
                 alert('Error al procesar el archivo. Por favor intenta de nuevo.');
                 fileInput.value = '';
                 btnLabel.innerHTML = originalHTML;
@@ -100,8 +54,15 @@ document.addEventListener('DOMContentLoaded', () => {
     function fileToBase64(file) {
         return new Promise((resolve, reject) => {
             const reader = new FileReader();
-            reader.onload = () => resolve(reader.result);
-            reader.onerror = reject;
+            reader.onload = () => {
+                const result = reader.result;
+                console.log('📄 Archivo leído, tipo:', file.type, 'tamaño:', file.size);
+                resolve(result);
+            };
+            reader.onerror = () => {
+                console.error('❌ Error leyendo archivo:', reader.error);
+                reject(reader.error);
+            };
             reader.readAsDataURL(file);
         });
     }

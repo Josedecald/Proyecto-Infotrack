@@ -56,30 +56,30 @@
                 <i class="bi bi-wrench-adjustable me-2"></i>Formulario de Reparación Técnica
             </h2>
 
-            <!-- BARRA DE PESTAÑAS DEL WIZARD -->
-            <ul class="nav nav-tabs justify-content-center mb-4" id="wizardTabs">
-                <li class="nav-item">
-                    <a class="nav-link active" data-step="1" href="#">1. Información General</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" data-step="2" href="#">2. Diagnóstico</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" data-step="3" href="#">3. Componentes</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" data-step="4" href="#">4. Observaciones</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" data-step="5" href="#">5. Falla</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" data-step="6" href="#">6. Fotos</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link disabled" data-step="7" href="#">7. Repuestos</a>
-                </li>
-            </ul>
+            <!-- BARRA DE PESTAÑAS DEL WIZARD - ACTUALIZADO -->
+            <div class="nav-tabs-horizontal" id="wizardTabs">
+                <button class="nav-tab-horizontal active" data-step="1">
+                    <i class="bi bi-info-circle me-2"></i>1. Información General
+                </button>
+                <button class="nav-tab-horizontal disabled" data-step="2">
+                    <i class="bi bi-clipboard-check me-2"></i>2. Diagnóstico
+                </button>
+                <button class="nav-tab-horizontal disabled" data-step="3">
+                    <i class="bi bi-gear me-2"></i>3. Componentes
+                </button>
+                <button class="nav-tab-horizontal disabled" data-step="4">
+                    <i class="bi bi-journal-text me-2"></i>4. Observaciones
+                </button>
+                <button class="nav-tab-horizontal disabled" data-step="5">
+                    <i class="bi bi-exclamation-triangle me-2"></i>5. Falla
+                </button>
+                <button class="nav-tab-horizontal disabled" data-step="6">
+                    <i class="bi bi-camera me-2"></i>6. Fotos
+                </button>
+                <button class="nav-tab-horizontal disabled" data-step="7">
+                    <i class="bi bi-box-seam me-2"></i>7. Repuestos
+                </button>
+            </div>
 
             <form class="row px-3 needs-validation" id="formularioReparacion" novalidate>
                 <p><small>Los campos marcados con * son obligatorios.</small></p>
@@ -749,7 +749,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/exceljs/4.4.0/exceljs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/xlsx-populate/browser/xlsx-populate.min.js"></script>
-    <script src="/JS/script-reparacion.js"></script>
-    <script src="/JS/steps.js"></script>
+    <script src="/public/JS/script-reparacion.js"></script>
+    <script src="/public/JS/steps.js"></script>
 </body>
 </html>
