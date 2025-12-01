@@ -137,7 +137,10 @@ document.addEventListener('DOMContentLoaded', async () => {
       let signaturePad = null;
 
       modal.addEventListener('shown.bs.modal', () => {
-        if (signaturePad) signaturePad.off();
+        if (signaturePad) {
+          signaturePad.clear();
+          signaturePad = null;
+        }
         ajustarCanvas(canvas);
 
         signaturePad = new SignaturePad(canvas, {
