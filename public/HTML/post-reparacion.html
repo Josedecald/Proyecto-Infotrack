@@ -49,25 +49,30 @@
   </div>
 </nav>
 
-  <div class="container col-xxl-8 mt-4 mb-5">
+  <div class="container col-xxl-8 col-md-8 mb-5">
     <div class="card bg-light p-4 shadow">
       <h2 class="text-center mb-4 text-primary">
         <i class="bi bi-wrench-adjustable me-2"></i>POST - Reparación Técnica
       </h2>
 
       <!-- Tabs: idénticas al wizard original -->
-      <ul class="nav nav-tabs justify-content-center mb-4" id="wizardTabsPost">
-        <li class="nav-item"><a class="nav-link active" data-step="1" href="#"><i class="bi bi-info-circle me-2"></i>1. Información</a></li>
-        <li class="nav-item"><a class="nav-link disabled" data-step="2" href="#"><i class="bi bi-arrow-up-right-circle me-2"></i>2. Procedimiento</a></li>
-        <li class="nav-item"><a class="nav-link disabled" data-step="3" href="#"><i class="bi bi-gear me-2"></i>3. Componentes</a></li>
-        <li class="nav-item"><a class="nav-link disabled" data-step="4" href="#"><i class="bi bi-pen me-2"></i>4. Firmas</a></li>
-      </ul>
+      <!-- BARRA DE PESTAÑAS HORIZONTALES PARA PASOS -->
+      <div class="nav-tabs-horizontal" id="wizardTabsPost">
+        <button class="nav-tab-horizontal active" data-step="1"><i class="bi bi-info-circle me-2"></i>1. Información</button>
+        <button class="nav-tab-horizontal disabled" data-step="2"><i class="bi bi-arrow-up-right-circle me-2"></i>2. Procedimiento</button>
+        <button class="nav-tab-horizontal disabled" data-step="3"><i class="bi bi-gear me-2"></i>3. Componentes</button>
+        <button class="nav-tab-horizontal disabled" data-step="4"><i class="bi bi-pen me-2"></i>4. Firmas</button>
+      </div>
 
       <form id="formPostReparacion" class="needs-validation px-3" novalidate>
+        <p><small>Los campos marcados con * son obligatorios.</small></p>
         <!-- STEP 1 - Información General (reaprovechada) -->
-        <div class="wizard-step-post" data-step="1" style="display:block;">
+        <div class="wizard-step post-step active" data-step="1">
+          <h5 class="border-bottom pb-2 text-primary">
+            <i class="bi bi-person-lines-fill me-2"></i>Información de Reparación
+          </h5>
           <div class="row g-3 mb-3">
-            <div class="col-md-4">
+            <div class="col-md-4">              
               <label class="form-label">Fabricante*</label>
                 <select id="pr_fabricante" class="form-select" required>
                     <option value="">-</option>
@@ -99,28 +104,32 @@
               <input id="pr_fecha" type="date" class="form-control" required>
             </div>
           </div>
-
           <div class="d-flex justify-content-end mb-3">
             <button type="button" class="btn btn-primary btn-lg pr-next">Siguiente <i class="bi bi-arrow-right-circle ms-1"></i></button>
           </div>
         </div>
 
         <!-- STEP 2 - Procedimiento realizado (col O13 según tu instrucción) -->
-        <div class="wizard-step-post" data-step="2" style="display:none;">
+        <div class="wizard-step post-step active" data-step="2">
+          <h5 class="border-bottom pb-2 text-primary">
+            <i class="bi bi-calendar3-week me-2"></i>Procedimiento Realizado
+          </h5>
           <div class="mb-3">
-            <label class="form-label">Procedimiento realizado y reparación (O13)*</label>
+            <label class="form-label">Procedimiento realizado y reparación*</label>
             <textarea id="pr_procedimiento" class="form-control" rows="4" required></textarea>
-            <div class="form-text">Este texto se mapeará en la celda O13 de la plantilla.</div>
           </div>
-
           <div class="d-flex justify-content-between mb-3">
             <button type="button" class="btn btn-secondary btn-lg pr-prev"><i class="bi bi-arrow-left-circle me-1"></i>Atrás</button>
             <button type="button" class="btn btn-primary btn-lg pr-next">Siguiente <i class="bi bi-arrow-right-circle ms-1"></i></button>
           </div>
         </div>
 
+
         <!-- STEP 3 - Componentes (Q38 - Q53 mapping) -->
-        <div class="wizard-step-post" data-step="3" style="display:none;">
+        <div class="wizard-step post-step active" data-step="3">
+          <h5 class="border-bottom pb-2 text-primary">
+            <i class="bi bi-nut me-2"></i> Funcionalidad De Los Componentes
+          </h5>
           <p class="small text-muted">Marca el estado de la funcionalidad del componente</p>
 
           <div class="row g-3">
@@ -147,21 +156,21 @@
             </div>
 
             <div class="col-md-3">
-              <label class="form-label">PULSACIONES DE TECLADO/BOTONES*</label>
+              <label class="form-label">PULSACIONES DE BOTONES*</label>
               <select id="pr_comp_keys" class="form-select pr-comp" required>
                 <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
               </select>
             </div>
 
             <div class="col-md-3">
-              <label class="form-label">SENSIBILIDAD DE PANTALLA - TÁCTIL*</label>
+              <label class="form-label">SENSIBILIDAD DE PANTALLA*</label>
               <select id="pr_comp_touch" class="form-select pr-comp" required>
                 <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
               </select>
             </div>
 
             <div class="col-md-3">
-              <label class="form-label">CONEXIÓN SIM Y VALIDACIÓN GPRS*</label>
+              <label class="form-label">CONEXIÓN Y VALIDACIÓN GPRS*</label>
               <select id="pr_comp_sim" class="form-select pr-comp" required>
                 <option value="">-</option><option value="si">Funcional</option><option value="no">No</option><option value="na">No Trae</option>
               </select>
@@ -237,7 +246,6 @@
                 </select>
             </div>
           </div>
-
           <div class="d-flex justify-content-between mb-3">
             <button type="button" class="btn btn-secondary btn-lg pr-prev"><i class="bi bi-arrow-left-circle me-1"></i>Atrás</button>
             <button type="button" class="btn btn-primary btn-lg pr-next">Siguiente <i class="bi bi-arrow-right-circle ms-1"></i></button>
@@ -245,7 +253,10 @@
         </div>
 
         <!-- STEP 5 - Firmas -->
-        <div class="wizard-step-post" data-step="4" style="display:none;">
+        <div class="wizard-step post-step active" data-step="4">
+          <h5 class="border-bottom pb-2 text-primary">
+            <i class="bi bi-pen me-2"></i> Firmas
+          </h5>
           <div class="row g-3">
             <div class="col-md-6">
               <label class="form-label">Firma de quien entrega (B63)</label>

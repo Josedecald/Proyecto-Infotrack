@@ -24,26 +24,26 @@ document.addEventListener('DOMContentLoaded', async () => {
   // ============================================
   // WIZARD
   // ============================================
-  const steps = document.querySelectorAll('.wizard-step-post');
-  const tabs  = document.querySelectorAll('#wizardTabsPost .nav-link');
+  const steps = document.querySelectorAll('.wizard-step.post-step');
+  const tabs  = document.querySelectorAll('#wizardTabsPost .nav-tab-horizontal');
   const nextBtns = document.querySelectorAll('.pr-next');
   const prevBtns = document.querySelectorAll('.pr-prev');
   let current = 1;
   const total = steps.length;
 
   function show(step) {
-    steps.forEach(s => s.style.display = 'none');
+    steps.forEach(s => s.classList.remove('active'));
     tabs.forEach(t => t.classList.remove('active','text-danger','fw-bold'));
 
-    const cur = document.querySelector(`.wizard-step-post[data-step="${step}"]`);
-    const tab = document.querySelector(`#wizardTabsPost .nav-link[data-step="${step}"]`);
-    if (cur) cur.style.display = 'block';
+    const cur = document.querySelector(`.wizard-step.post-step[data-step="${step}"]`);
+    const tab = document.querySelector(`#wizardTabsPost .nav-tab-horizontal[data-step="${step}"]`);
+    if (cur) cur.classList.add('active');
     if (tab) tab.classList.add('active');
     current = step;
   }
 
   function collectRequiredValid(step) {
-    const stepDiv = document.querySelector(`.wizard-step-post[data-step="${step}"]`);
+    const stepDiv = document.querySelector(`.wizard-step.post-step[data-step="${step}"]`);
     if (!stepDiv) return true;
 
     let ok = true;
@@ -62,7 +62,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       }
     });
 
-    const tab = document.querySelector(`#wizardTabsPost .nav-link[data-step="${step}"]`);
+    const tab = document.querySelector(`#wizardTabsPost .nav-tab-horizontal[data-step="${step}"]`);
     if (!ok) {
       if (tab) tab.classList.add('text-danger','fw-bold');
       if (firstInvalid) firstInvalid.scrollIntoView({behavior:'smooth', block:'center'});
@@ -76,7 +76,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     if (!collectRequiredValid(current)) return;
     const next = current + 1;
     if (next <= total) {
-      const tab = document.querySelector(`#wizardTabsPost .nav-link[data-step="${next}"]`);
+      const tab = document.querySelector(`#wizardTabsPost .nav-tab-horizontal[data-step="${next}"]`);
       if (tab) tab.classList.remove('disabled');
       show(next);
     }
@@ -266,8 +266,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     const hoja = workbookExcelJS.worksheets[0];
 
     // Firmas
-    if (firmaEntrega) await addBase64ImageToSheet(firmaEntrega, hoja, 1, 62, 250, 100);
-    if (firmaRecibe)  await addBase64ImageToSheet(firmaRecibe,  hoja, 15, 62, 250, 100);
+    if (firmaEntrega) await addBase64ImageToSheet(firmaEntrega, hoja, 1, 61, 250, 100);
+    if (firmaRecibe)  await addBase64ImageToSheet(firmaRecibe,  hoja, 15, 61, 250, 100);
 
     // Fotos
     const inputFotos = document.getElementById('fotos');

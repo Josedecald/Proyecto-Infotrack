@@ -4,22 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Documentos de Reparación</title>
+
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
     <link rel="stylesheet" href="../CSS/styles2.css">
+    <link rel="stylesheet" href="../CSS/styles3.css">
 </head>
-<body style="background-color: rgba(128, 128, 128, 0.151);">
+<body>
 
-<nav class="navbar bg-primary fixed-top" data-bs-theme="light">
+<nav class="navbar navbar-expand-lg bg-primary fixed-top" data-bs-theme="light">
   <div class="container-fluid">
-    <a class="navbar-brand fw-bold text-light" href="#"><i class="bi bi-wrench-adjustable-circle me-2"></i>Sistema de reparación tecnica</a>
+    <a class="navbar-brand fw-bold text-light" href="#">
+      <i class="bi bi-wrench-adjustable-circle me-2"></i>Sistema de Reparación Técnica
+    </a>
     <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon "></span>
+      <span class="navbar-toggler-icon"></span>
     </button>
+
     <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
       <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="bi bi-three-dots-vertical me-2"></i>Menú</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel">
+          <i class="bi bi-three-dots-vertical me-2"></i>Menú
+        </h5>
+        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
         <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
@@ -30,62 +37,67 @@
             <a class="nav-link" href="./seleccionR.html"><i class="bi bi-wrench-adjustable-circle me-2"></i>Reparación</a>
           </li>
           <li class="nav-item dropdown mb-2">
-            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi bi-arrow-left-right me-2"></i>
-              Recepcion y entrega
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-arrow-left-right me-2"></i>Recepción y entrega
             </a>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item mb-1" href="./seleccionrye.html">Menú</a></li>
-              <li><a class="dropdown-item" href="#">Hand Held</a></li>
-              <li><a class="dropdown-item" href="#">Impresora Movil</a></li>
-              <li><a class="dropdown-item" href="#">Impresora Fija</a></li>
-              <li><a class="dropdown-item" href="#">Accesorios</a></li>
+              <li><a class="dropdown-item mb-1" href="./seleccionrye.html"><i class="bi bi-collection me-2"></i>Menú</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item mb-1" href="#"><i class="bi bi-phone me-2"></i>Hand Held</a></li>
+              <li><a class="dropdown-item mb-1" href="#"><i class="bi bi-printer me-2"></i>Impresora Móvil</a></li>
+              <li><a class="dropdown-item mb-1" href="#"><i class="bi bi-printer-fill me-2"></i>Impresora Fija</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-box me-2"></i>Accesorios</a></li>
             </ul>
           </li>
         </ul>
       </div>
     </div>
+
   </div>
 </nav>
 
-    <section>
-        <div class="container py-5">
-            <div class="row g-4 justify-content-center">
-                <!-- Crear nuevo archivo -->
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
-                    <div class="card shadow w-100 d-flex flex-column">
-                        <div class="card-body text-center d-flex flex-column flex-grow-1">
-                            <h6 class="card-title">Crear nuevo archivo de reparación</h6>
-                            <div class="mt-auto">
-                                <a href="../HTML/reparacion.html" class="btn btn-primary">
-                                    <i class="bi bi-plus-circle px-1"></i>Nuevo archivo
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Subir archivo existente -->
-                <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
-                    <div class="card shadow w-100 d-flex flex-column">
-                        <div class="card-body text-center d-flex flex-column flex-grow-1">
-                            <h6 class="card-title">Subir un archivo de reparación existente</h6>
-                            <p class="small text-muted">Formatos aceptados: .xlsx, .xls</p>
-                            <div class="mt-auto">
-                                <label class="btn btn-primary" id="btnSubirArchivo">
-                                    <i class="bi bi-upload px-1"></i>Subir archivo
-                                    <input type="file" id="fileInputExcel" accept=".xlsx,.xls" hidden>
-                                </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+<main class="page-wrapper">
+  <section>
+    <div class="cards-grid">
+      <!-- Tarjeta: Nuevo archivo -->
+      <div class="modern-card">
+        <div class="card-image-wrapper" style="height:120px; background: linear-gradient(135deg,#f5f7fa 0%,#e9eef8 100%); display:flex; align-items:center; justify-content:center;">
+          <i class="bi bi-file-earmark-plus-fill fs-1 text-primary"></i>
         </div>
-    </section>
+        <div class="card-content">
+          <div class="card-icon"><i class="bi bi-plus-circle"></i></div>
+          <h6>Crear nuevo archivo de reparación</h6>
+          <p class="card-description">Inicia un nuevo reporte de reparación técnico y completa el formulario paso a paso.</p>
+          <a href="../HTML/reparacion.html" class="btn-modern">
+            <i class="bi bi-plus-lg"></i> Nuevo archivo
+          </a>
+        </div>
+      </div>
 
-    <footer class="mt-5 text-center text-muted">© 2025 Sistema de Gestión Técnica</footer>
+      <!-- Tarjeta: Subir archivo existente -->
+      <div class="modern-card">
+        <div class="card-image-wrapper" style="height:120px; background: linear-gradient(135deg,#f7f9f7 0%,#eef6ec 100%); display:flex; align-items:center; justify-content:center;">
+          <i class="bi bi-upload fs-1 text-primary"></i>
+        </div>
+        <div class="card-content">
+          <div class="card-icon"><i class="bi bi-upload"></i></div>
+          <h6>Subir archivo de reparación</h6>
+          <p class="card-description">Importa un archivo existente (.xlsx, .xls) para continuar o revisar reportes previos.</p>
+          <label class="btn-modern" id="btnSubirArchivo" style="cursor:pointer;">
+            <i class="bi bi-cloud-upload"></i> Subir archivo
+            <input type="file" id="fileInputExcel" accept=".xlsx,.xls" hidden>
+          </label>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../JS/seleccionR.js"></script>
+<footer class="mt-5 text-center">
+  <p class="text-muted">© 2025 Sistema de Gestión Técnica</p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+<script src="../JS/seleccionR.js"></script>
 </body>
 </html>
