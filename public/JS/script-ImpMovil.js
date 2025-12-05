@@ -703,22 +703,18 @@ actualizarPreviewCorreo() {
                 const problema = item.querySelector(".problema-equipo")?.value || "";
 
                 const estados = {
-                    lapiz: item.querySelector(".estado-lapiz")?.value || "N/A",
-                    cuerdaLapiz: item.querySelector(".estado-cuerdaLapiz")?.value || "N/A",
-                    correaMano: item.querySelector(".estado-correaMano")?.value || "N/A",
-                    pantalla: item.querySelector(".estado-pantalla")?.value || "N/A",
-                    base: item.querySelector(".estado-base")?.value || "N/A",
-                    cargador: item.querySelector(".estado-cargador")?.value || "N/A",
-                    bateria: item.querySelector(".estado-bateria")?.value || "N/A",
-                    cableUSB: item.querySelector(".estado-cableUSB")?.value || "N/A",
-                    estuche: item.querySelector(".estado-estuche")?.value || "N/A",
-                    empaque: item.querySelector(".estado-empaque")?.value || "N/A",
-                    tornillos: item.querySelector(".estado-tornillos")?.value || "N/A",
-                    tapa: item.querySelector(".estado-tapa")?.value || "N/A",
-                    gatillo: item.querySelector(".estado-gatillo")?.value || "N/A",
-                    botones: item.querySelector(".estado-botones")?.value || "N/A",
-                    audifonos: item.querySelector(".estado-audifonos")?.value || "N/A",
-                    manual: item.querySelector(".estado-manual")?.value || "N/A"
+                    tapaBateria: item.querySelector(".tapa-bateria")?.value || "N/A",
+                    tapaPapel: item.querySelector(".tapa-papel")?.value || "N/A",
+                    rodillo: item.querySelector(".rodillo")?.value || "N/A",
+                    mecanismo: item.querySelector(".mecanismo")?.value || "N/A",
+                    pulsadores: item.querySelector(".pulsadores")?.value || "N/A",
+                    ledIndicador: item.querySelector(".led-indicador")?.value || "N/A",
+                    aberturaPapel: item.querySelector(".abertura-papel")?.value || "N/A",
+                    botonesFrontales: item.querySelector(".botones-frontales")?.value || "N/A",
+                    vidrioIrda: item.querySelector(".vidrio-irda")?.value || "N/A",
+                    pinCarga: item.querySelector(".pin-carga")?.value || "N/A",
+                    carcasa: item.querySelector(".carcasa")?.value || "N/A",
+                    bateria: item.querySelector(".bateria")?.value || "N/A"
                 };
 
                 if (serial && modelo && problema) {
@@ -731,7 +727,7 @@ actualizarPreviewCorreo() {
                 return;
             }
 
-            const response = await fetch("/public/Referencia.xlsx");
+            const response = await fetch("/public/ReferenciaRecImpMovil.xlsx");
             if (!response.ok) throw new Error("No se pudo cargar la plantilla Referencia.xlsx");
             
             const blobPlantilla = await response.blob();
@@ -746,21 +742,20 @@ actualizarPreviewCorreo() {
                 sheet.cell(`C${f}`).value(eq.serial);
                 sheet.cell(`D${f}`).value(eq.modelo);
                 
-                const estadosOrden = ["lapiz", "cuerdaLapiz", "correaMano", "pantalla", "base", "cargador", 
-                                    "bateria", "cableUSB", "estuche", "empaque", "tornillos", "tapa", 
-                                    "gatillo", "botones", "audifonos", "manual"];
+                const estadosOrden = ["tapaBateria", "tapaPapel", "rodillo", "mecanismo", "pulsadores", "ledIndicador", 
+                                    "aberturaPapel", "botonesFrontales", "vidrioIrda", "pinCarga", "carcasa", "bateria"];
                 
                 estadosOrden.forEach((estado, index) => {
                     const columna = String.fromCharCode(69 + index);
                     sheet.cell(`${columna}${f}`).value(eq.estados[estado]);
                 });
 
-                sheet.cell(`T${f}`).value(eq.problema);
+                sheet.cell(`Q${f}`).value(eq.problema);
             });
 
             if (equipos.length < maxEquipos) {
                 for (let f = filaBase + equipos.length; f < filaBase + maxEquipos; f++) {
-                    sheet.range(`B${f}:T${f}`).value("");
+                    sheet.range(`B${f}:Q${f}`).value("");
                     sheet.row(f).hidden(true);
                 }
             }
@@ -782,6 +777,14 @@ actualizarPreviewCorreo() {
 
             const hojaPrincipal = workbookExcelJS.worksheets[0];
 
+            if (equipos.length > 1) {
+                for (let i = 1; i < equipos.length; i++) {
+                    const fila = filaBase + i;
+                    const rowObj = hojaPrincipal.getRow(fila);
+                    rowObj.hidden = false;
+                }
+            }
+
             if (this.firmasGuardadas.recepcion) {
                 const firmaBase64 = this.firmasGuardadas.recepcion.replace(/^data:image\/png;base64,/, "");
                 const firmaId = workbookExcelJS.addImage({
@@ -790,7 +793,7 @@ actualizarPreviewCorreo() {
                 });
 
                 hojaPrincipal.addImage(firmaId, {
-                    tl: { col: 5, row: 31 },
+                    tl: { col: 1, row: 27 },
                     ext: { width: 300, height: 100 }
                 });
             }
@@ -803,7 +806,7 @@ actualizarPreviewCorreo() {
                 });
 
                 hojaPrincipal.addImage(firmaId2, {
-                    tl: { col: 1, row: 31 },
+                    tl: { col: 6, row: 27 },
                     ext: { width: 300, height: 100 }
                 });
             }
@@ -852,37 +855,31 @@ actualizarPreviewCorreo() {
                 const modelo = item.querySelector(".modelo")?.value || "";
                 
                 const estados = {
-                    lapiz: item.querySelector(".estado-lapiz")?.value || "N/A",
-                    cuerdaLapiz: item.querySelector(".estado-cuerdaLapiz")?.value || "N/A",
-                    correaMano: item.querySelector(".estado-correaMano")?.value || "N/A",
-                    pantalla: item.querySelector(".estado-pantalla")?.value || "N/A",
-                    base: item.querySelector(".estado-base")?.value || "N/A",
-                    cargador: item.querySelector(".estado-cargador")?.value || "N/A",
-                    bateria: item.querySelector(".estado-bateria")?.value || "N/A",
-                    cableUSB: item.querySelector(".estado-cableUSB")?.value || "N/A",
-                    estuche: item.querySelector(".estado-estuche")?.value || "N/A",
-                    empaque: item.querySelector(".estado-empaque")?.value || "N/A",
-                    tornillos: item.querySelector(".estado-tornillos")?.value || "N/A",
-                    tapa: item.querySelector(".estado-tapa")?.value || "N/A",
-                    gatillo: item.querySelector(".estado-gatillo")?.value || "N/A",
-                    botones: item.querySelector(".estado-botones")?.value || "N/A",
-                    audifonos: item.querySelector(".estado-audifonos")?.value || "N/A"
+                    tapaBateria: item.querySelector(".tapa-bateria")?.value || "N/A",
+                    tapaPapel: item.querySelector(".tapa-papel")?.value || "N/A",
+                    rodillo: item.querySelector(".rodillo")?.value || "N/A",
+                    mecanismo: item.querySelector(".mecanismo")?.value || "N/A",
+                    pulsadores: item.querySelector(".pulsadores")?.value || "N/A",
+                    ledIndicador: item.querySelector(".led-indicador")?.value || "N/A",
+                    aberturaPapel: item.querySelector(".abertura-papel")?.value || "N/A",
+                    botonesFrontales: item.querySelector(".botones-frontales")?.value || "N/A",
+                    vidrioIrda: item.querySelector(".vidrio-irda")?.value || "N/A",
+                    pinCarga: item.querySelector(".pin-carga")?.value || "N/A",
+                    carcasa: item.querySelector(".carcasa")?.value || "N/A",
+                    bateria: item.querySelector(".bateria")?.value || "N/A"
                 };
 
-                const cambioRepuestos = item.querySelector(".cambio-repuestos")?.value || "";
                 const solucion = item.querySelector(".descripcion-solucion")?.value || "";
 
                 const verificacion = {
-                    wifi: item.querySelector(".check-wifi")?.checked ? "✓" : "",
+                    calidadImp: item.querySelector(".check-imp")?.checked ? "✓" : "",
                     bluetooth: item.querySelector(".check-bluetooth")?.checked ? "✓" : "",
-                    celular: item.querySelector(".check-celular")?.checked ? "✓" : "",
-                    pantalla: item.querySelector(".check-pantalla")?.checked ? "✓" : "",
-                    escaner: item.querySelector(".check-escaner")?.checked ? "✓" : "",
-                    teclado: item.querySelector(".check-teclado")?.checked ? "✓" : ""
+                    wifi: item.querySelector(".check-wifi")?.checked ? "✓" : "",
+                    bateria: item.querySelector(".check-bateria")?.checked ? "✓" : "",
                 };
 
                 if (serial && modelo && solucion) {
-                    equipos.push({ serial, modelo, estados, cambioRepuestos, verificacion, solucion });
+                    equipos.push({ serial, modelo, estados, verificacion, solucion });
                 }
             });
 
@@ -891,7 +888,7 @@ actualizarPreviewCorreo() {
                 return;
             }
 
-            const response = await fetch("/public/ReferenciaEntrega.xlsx");
+            const response = await fetch("/public/ReferenciaEntImpMovil.xlsx");
             if (!response.ok) throw new Error("No se pudo cargar la plantilla ReferenciaEntrega.xlsx");
             
             const blobPlantilla = await response.blob();
@@ -906,16 +903,14 @@ actualizarPreviewCorreo() {
                 sheet.cell(`C${f}`).value(eq.serial);
                 sheet.cell(`D${f}`).value(eq.modelo);
 
-                const estadosOrden = ["lapiz", "cuerdaLapiz", "correaMano", "pantalla", "base", "cargador", 
-                                    "bateria", "cableUSB", "estuche", "empaque", "tornillos", "tapa", 
-                                    "gatillo", "botones", "audifonos"];
+                const estadosOrden = ["tapaBateria", "tapaPapel", "rodillo", "mecanismo", "pulsadores", "ledIndicador", 
+                                    "aberturaPapel", "botonesFrontales", "vidrioIrda", "pinCarga", "carcasa", "bateria"];
                 
                 estadosOrden.forEach((estado, index) => {
                     const columna = String.fromCharCode(69 + index);
                     sheet.cell(`${columna}${f}`).value(eq.estados[estado] || "N/A");
                 });
 
-                sheet.cell(`T${f}`).value(eq.cambioRepuestos);
                 sheet.cell(`U${f}`).value(eq.verificacion.wifi);
                 sheet.cell(`V${f}`).value(eq.verificacion.bluetooth);
                 sheet.cell(`W${f}`).value(eq.verificacion.celular);

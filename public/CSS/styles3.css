@@ -9,6 +9,7 @@
   --primary-dark: #0056b3;
   --primary-gradient: linear-gradient(135deg, #0d6efd 0%, #0056b3 100%);
   --secondary-color: #198754;
+  --text-base:#fff;
   --text-primary: #333;
   --text-secondary: #6c757d;
   --bg-light: #f8f9fa;
@@ -84,7 +85,7 @@ body {
 
 .navbar-nav .nav-link {
   padding: var(--spacing-sm) var(--spacing-md);
-  color: var(--text-primary) !important;
+  color: var(--text-base) !important;
   border-left: 4px solid transparent;
   transition: var(--transition-fast);
 }
@@ -199,7 +200,7 @@ body {
   font-size: 1rem;
   color: var(--text-secondary);
 }
-
+/*
 .page-wrapper .section-title:first-of-type::after {
   content: '';
   position: absolute;
@@ -211,7 +212,7 @@ body {
   background: var(--primary-gradient);
   border-radius: 2px;
 }
-
+*/
 /* Títulos de secciones dentro del formulario */
 .wizard-step .section-title {
   display: flex;
