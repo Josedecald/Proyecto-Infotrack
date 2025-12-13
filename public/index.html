@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Técnica</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <link rel="stylesheet" href="/public/CSS/styles2.css">
+    <link rel="stylesheet" href="/public/CSS/styles3.css">
+</head>
+<body>
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-primary fixed-top" data-bs-theme="light">
+  <div class="container-fluid">
+    <a class="navbar-brand fw-bold text-light" href="index.html">
+        <i class="bi bi-gear-fill me-2"></i>Sistema de Gestión Técnica
+    </a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbar" aria-controls="offcanvasNavbar" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNavbar" aria-labelledby="offcanvasNavbarLabel">
+      <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasNavbarLabel"><i class="bi bi-three-dots-vertical me-2"></i>Menú Principal</h5>
+        <button type="button" class="btn-close btn-close-dark" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+          <li class="nav-item mb-2">
+            <a class="nav-link active" aria-current="page" href="index.html"><i class="bi bi-house me-2"></i>Inicio</a>
+          </li>
+          <li class="nav-item mb-2">
+            <a class="nav-link" href="public/HTML/seleccionR.html"><i class="bi bi-wrench-adjustable-circle me-2"></i>Reparación</a>
+          </li>
+          <li class="nav-item dropdown mb-2">
+            <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="bi bi-arrow-left-right me-2"></i>Recepción y Entrega
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item mb-1" href="/public/HTML/seleccionrye.html"><i class="bi bi-collection me-2"></i>Menú</a></li>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item mb-1" href="/public/HTML/HandHeld.html"><i class="bi bi-phone me-2"></i>Hand Held</a></li>
+              <li><a class="dropdown-item mb-1" href="/public/HTML/ImpMovil.html"><i class="bi bi-printer me-2"></i>Impresora Móvil</a></li>
+              <li><a class="dropdown-item mb-1" href="#"><i class="bi bi-printer-fill me-2"></i>Impresora Fija</a></li>
+              <li><a class="dropdown-item" href="#"><i class="bi bi-box me-2"></i>Accesorios</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<div class="page-wrapper">
+    <div class="section-title text-center mb-5">
+        <h3 class="mb-3">Bienvenido al Sistema de Gestión Técnica</h3>
+        <p class="text-muted">Gestiona documentos de reparación, recepción y entrega de equipos técnicos de manera profesional</p>
+    </div>
+
+    <!-- Grid de Tarjetas Principales -->
+    <div class="cards-grid mb-5">
+        <!-- Tarjeta: Reparación -->
+        <div class="modern-card">
+            <div class="card-badge">
+                <i class="bi bi-tools me-1"></i>Reparación
+            </div>
+            <div class="card-image-wrapper" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+                <i class="bi bi-wrench-adjustable-circle" style="font-size: 5rem; color: rgba(255,255,255,0.9);"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="bi bi-tools"></i>
+                </div>
+                <h6>Módulo de Reparación</h6>
+                <p class="card-description">
+                    Genera documentos técnicos detallados de reparación con información de componentes, repuestos y evidencias fotográficas.
+                </p>
+                <a href="/public/HTML/seleccionR.html" class="btn-modern">
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                    Acceder al Módulo
+                </a>
+            </div>
+        </div>
+
+        <!-- Tarjeta: Recepción y Entrega -->
+        <div class="modern-card">
+            <div class="card-badge">
+                <i class="bi bi-arrow-left-right me-1"></i>Recepción/Entrega
+            </div>
+            <div class="card-image-wrapper" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                <i class="bi bi-arrow-left-right" style="font-size: 5rem; color: rgba(255,255,255,0.9);"></i>
+            </div>
+            <div class="card-content">
+                <div class="card-icon">
+                    <i class="bi bi-arrow-left-right"></i>
+                </div>
+                <h6>Recepción y Entrega</h6>
+                <p class="card-description">
+                    Documenta la recepción y entrega de equipos Hand Held, impresoras móviles y accesorios con firmas digitales.
+                </p>
+                <a href="/public/HTML/seleccionrye.html" class="btn-modern">
+                    <i class="bi bi-arrow-right-circle-fill"></i>
+                    Acceder al Módulo
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Características -->
+    <div class="section-title text-center mb-4">
+        <h4 class="text-primary fw-bold">Características del Sistema</h4>
+        <p class="text-muted">Herramientas profesionales para la gestión técnica</p>
+    </div>
+
+    <div class="row g-4 mb-5">
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-file-earmark-excel text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h6 class="fw-bold">Generación de Excel</h6>
+                    <p class="small text-muted mb-0">Documentos en formato Excel con plantillas profesionales</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-pen text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h6 class="fw-bold">Firmas Digitales</h6>
+                    <p class="small text-muted mb-0">Captura de firmas con tecnología táctil integrada</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-camera text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h6 class="fw-bold">Evidencias Fotográficas</h6>
+                    <p class="small text-muted mb-0">Adjunta fotografías del estado de los equipos</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-3">
+            <div class="card h-100 border-0 shadow-sm">
+                <div class="card-body text-center p-4">
+                    <div class="mb-3">
+                        <i class="bi bi-envelope text-primary" style="font-size: 2.5rem;"></i>
+                    </div>
+                    <h6 class="fw-bold">Envío por Email</h6>
+                    <p class="small text-muted mb-0">Envía documentos directamente por correo electrónico</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Acceso Rápido -->
+    <div class="card bg-light border-0 shadow">
+        <div class="card-body p-4">
+            <h5 class="text-primary fw-bold mb-3">
+                <i class="bi bi-lightning-charge-fill me-2"></i>Acceso Rápido
+            </h5>
+            <div class="row g-3">
+                <div class="col-md-6 col-lg-3">
+                    <a href="/public/HTML/reparacion.html" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-file-earmark-plus me-2"></i>Nueva Reparación
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <a href="/public/HTML/HandHeld.html" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-phone me-2"></i>Hand Held
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <a href="/public/HTML/ImpMovil.html" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-printer me-2"></i>Impresora Móvil
+                    </a>
+                </div>
+                <div class="col-md-6 col-lg-3">
+                    <a href="/public/HTML/post-reparacion.html" class="btn btn-outline-primary w-100">
+                        <i class="bi bi-arrow-clockwise me-2"></i>Post-Reparación
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="text-center">
+    <p>
+        <i class="bi bi-shield-check me-2"></i>
+        © 2025 Sistema de Gestión Técnica - Todos los derechos reservados
+    </p>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
